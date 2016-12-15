@@ -12,6 +12,6 @@ Instalacja
 ------------
 
 Pobierz pliki z tego repozytorium do lokalnego folderu.
-W folderze wywołaj komendę 1composer update`.
+W folderze wywołaj komendę `composer update`.
 
 [1]: http://is.mud.pl
