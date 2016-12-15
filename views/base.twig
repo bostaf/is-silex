@@ -1,0 +1,64 @@
+<!doctype html>
+
+<html lang="pl">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Infernal Seed{% endblock %}</title>
+    <meta name="description" content="Oficjalna strona klau Infernal Seed działającego w świecie MUDa Cygnus Division" />
+    <meta name="author" content="Grzegorz 'Bostaf' Szaliński" />
+
+    <link rel="stylesheet" type="text/css" href="../web/public/css/style.css?v=1.0" />
+    <!--[if lt IE 7]>
+    <link rel="stylesheet" type="text/css" href="../web/public/css/style-ie.css?v=1.0" />
+    <![endif]-->
+
+    <!--[if lt IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="naglowek">&nbsp;</div>
+<div class="group">
+    <div class="menu">
+        <a href="{{ path('powitanie') }}">Powitanie</a><br>
+        <a href="news.php">Aktualności</a><br>
+        <br>
+        <b>»&nbsp;O klanie</b><br>
+        <a href="misiaki.php">mISiaki</a><br>
+        <a href="{{ path('historia') }}">Historia</a><br>
+        <a href="{{ path('opis-klanu') }}">Opis Klanu</a><br>
+        <a href="{{ path('kodeks') }}">Kodeks</a><br>
+        <a href="{{ path('umiejetnosci') }}">Umiejętności</a><br>
+        <a href="{{ path('totemy') }}">Totemy</a><br>
+        <a href="{{ path('logi') }}">Logi</a><br>
+        <br>
+        <b>»&nbsp;Inne</b><br>
+        <a href="http://www.prv.pl/kg/wypisz.php?id=52723" target="_parent">Księga Gości</a><br>
+        <a href="http://galeria.mud.pl/index.php?/category/885" target="_parent">Galeria</a><br>
+        <a href="{{ path('linki') }}">Linki</a><br>
+        <a href="{{ path('o-stronie') }}">O stronie</a><br>
+        <a href="../src/index.html">Stare WWW</a><br>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+<div class="stopka">
+    <hr>
+    <a href="misiaki.php">mISiaki</a> ::
+    <a href="{{ path('historia') }}">Historia</a> ::
+    <a href="{{ path('opis-klanu') }}">Opis Klanu</a> ::
+    <a href="{{ path('kodeks') }}">Kodeks</a> ::
+    <a href="{{ path('umiejetnosci') }}">Umiejętności</a> ::
+    <a href="{{ path('logi') }}">Logi</a> ::
+    <a href="http://www.prv.pl/kg/wypisz.php?id=52723">Księga Gości</a> ::
+    <a href="{{ path('linki') }}">Linki</a>
+    <br><br>
+    <span class="copy"><a href="{{ path('o-stronie') }}">© maUa Bostafinka™ and Infernal Seed 2000-2005</a></span>
+    </td>
+</div>
+<script src="../web/public/js/scripts.js?v=1.0"></script>
+</body>
+</html>

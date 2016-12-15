@@ -1,0 +1,19 @@
+{
+    "name": "bostaf/is",
+    "description": "Strona domowa klanu Infernal Seed",
+    "type": "project",
+    "keywords": ["MUD", "Infernal Seed", "Cygnus Division", "strona domowa"],
+    "homepage": "http://is.mud.pl",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Grzegorz Szaliński",
+            "email": "grzegorz.szalinski@gmail.com"
+        }
+    ],
+    "require": {
+        "silex/silex": "~2.0",
+        "twig/twig": "~1.0",
+        "symfony/twig-bridge": "^3.2"
+    }
+}

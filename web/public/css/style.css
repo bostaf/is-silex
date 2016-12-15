@@ -1,0 +1,108 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background-color: black;
+    margin: 0 auto;
+    max-width: 750px;
+}
+body {
+    position: relative;
+    min-height: 300px;
+    color: #3399cc;
+    background-color: black;
+    font-family: verdana,arial,geneva,helvetica,lucida,sans-serif;
+    background-image: url("../img/banner.jpg?v=1.0");
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-size: 100% auto;
+    font-size: 1em;
+}
+h1 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1em;
+    color: #ffff99;
+}
+hr {
+    margin: 6px 0;
+    width: 100%;
+    text-align: center;
+    color: #ffff99;
+}
+strong {
+    font-weight: bold;
+    color: #00ccff;
+}
+.naglowek {
+    float: left;
+    width: 100%;
+    height: 0;
+    padding-top: 24%;
+}
+.menu {
+    float: left;
+    width: 20%;
+    color: #ffff99;
+}
+.menu a {
+    color: #ffffcc;
+    text-decoration: none;
+}
+.menu a:hover {
+    text-decoration: underline;
+}
+.content {
+    float: right;
+    width: 80%;
+    text-align: justify;
+}
+.content a {
+    color: #00ddff;
+    text-decoration: none;
+}
+.content a:hover {
+    text-decoration: underline;
+}
+.group:after {
+    content:"";
+    display: table;
+    clear: both;
+}
+.group {
+    padding: 0.5em;
+}
+.stopka {
+    text-align: center;
+    font-size: 0.8em;
+    color: #ffff99;
+}
+.stopka a {
+    color: #ffffcc;
+    text-decoration: none;
+}
+.stopka a:hover {
+    text-decoration: underline;
+}
+.copy {
+    color: #666666;
+    font-size: 0.7em;
+}
+.copy a {
+    color: #666666;
+    text-decoration: none;
+}
+.copy a:hover {
+    text-decoration: underline;
+}
+@media screen and (max-width: 750px) {
+    .menu {
+        display: none;
+    }
+    .content {
+        float: none;
+        width: auto;
+    }
+}
