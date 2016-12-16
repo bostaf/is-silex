@@ -13,6 +13,7 @@ Instalacja
 -----------
 
 W głównym folderze dokumentów servera Apache:
+
 1. `git clone https://github.com/bostaf/is-silex`
 2. `cd is-silex`
 3. `composer update`
