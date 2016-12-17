@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace Is\Controller;
 
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
@@ -9,7 +9,7 @@ class MainController implements ControllerProviderInterface {
     public function connect(Application $app) {
         $factory = $app['controllers_factory'];
         /*
-        $factory->get('/','App\MainController::home');
+        $factory->get('/','Is\MainController::home');
         $factory->get('foo','MyApp\MyClassController::doFoo');
         */
         $factory->get('/', function () use ($app) {
