@@ -13,34 +13,34 @@ class MainController implements ControllerProviderInterface {
         $factory->get('foo','MyApp\MyClassController::doFoo');
         */
         $factory->get('/', function () use ($app) {
-            return $app['twig']->render('powitanie.twig', array());
+            return $app['twig']->render('powitanie.html.twig', array());
         })->bind('powitanie');
         $factory->get('/historia', function () use ($app) {
-            return $app['twig']->render('historia.twig', array());
+            return $app['twig']->render('historia.html.twig', array());
         })->bind('historia');
         $factory->get('/opis-klanu', function () use ($app) {
-            return $app['twig']->render('opis-klanu.twig', array());
+            return $app['twig']->render('opis-klanu.html.twig', array());
         })->bind('opis-klanu');
         $factory->get('/kodeks', function () use ($app) {
-            return $app['twig']->render('kodeks.twig', array());
+            return $app['twig']->render('kodeks.html.twig', array());
         })->bind('kodeks');
         $factory->get('/umiejetnosci', function () use ($app) {
-            return $app['twig']->render('umiejetnosci.twig', array());
+            return $app['twig']->render('umiejetnosci.html.twig', array());
         })->bind('umiejetnosci');
         $factory->get('/totemy', function () use ($app) {
-            return $app['twig']->render('totemy.twig', array());
+            return $app['twig']->render('totemy.html.twig', array());
         })->bind('totemy');
         $factory->get('/logi', function () use ($app) {
-            return $app['twig']->render('logi.twig', array());
+            return $app['twig']->render('logi.html.twig', array());
         })->bind('logi');
         $factory->get('/o-stronie', function () use ($app) {
-            return $app['twig']->render('strona.twig', array());
+            return $app['twig']->render('strona.html.twig', array());
         })->bind('o-stronie');
         $factory->get('/linki', function () use ($app) {
-            return $app['twig']->render('linki.twig', array());
+            return $app['twig']->render('linki.html.twig', array());
         })->bind('linki');
         $factory->get('/hello/{name}', function ($name) use ($app) {
-            return $app['twig']->render('index.twig', array(
+            return $app['twig']->render('index.html.twig', array(
                 'name' => $name,
             ));
         })->bind('hello');
