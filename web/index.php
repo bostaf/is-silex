@@ -2,7 +2,7 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-$app = new Silex\Application();
+$app = new Is\Service\Application();
 
 require __DIR__.'/../src/app.php';
 
