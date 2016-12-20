@@ -36,6 +36,9 @@ strong {
     font-weight: bold;
     color: #00ccff;
 }
+ul {
+    padding-left: 1em;
+}
 .naglowek {
     float: left;
     width: 100%;

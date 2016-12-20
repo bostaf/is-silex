@@ -51,11 +51,10 @@ class MainController implements ControllerProviderInterface {
     }
 
     public function aktualnosci(Application $app) {
-        $news = new News();
-        $news->getNews();
+        $news = new News($app['config']['data']['news']['dir']);
 
         return $app['twig']->render('aktualnosci.html.twig', array(
-            'news' => $news
+            'news' => $news->getNews()
         ));
     }
 
