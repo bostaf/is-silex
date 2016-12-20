@@ -4,4 +4,11 @@
 <h1>Buba</h1>
 <hr>
     <br><br>Czujesz, że stało się coś naprawdę strasznego...
+    <br>
+    Co zrobisz:
+    <ul>
+        <li><a href="https://www.google.pl">Flee</a></li>
+        <li><a href="{{ path('powitanie') }}">Kill bug</a></li>
+        <li><a href="{{ app.request.baseurl }}" onclick="window.history.go(-1); return false;">Enter portal</a></li>
+    </ul>
 {% endblock %}

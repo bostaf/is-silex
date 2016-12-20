@@ -1,2 +1,7 @@
 app:
   debug: true
+
+data:
+  news:
+    dir: '../web/data/news'
+    file_regex: '/news-([0-9]{4})-([0-9]{2})-([0-9]{2})-([A-Z,a-z]*).txt/'
