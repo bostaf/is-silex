@@ -36,6 +36,9 @@ strong {
     font-weight: bold;
     color: #00ccff;
 }
+ul {
+    padding-left: 1em;
+}
 .naglowek {
     float: left;
     width: 100%;
@@ -96,6 +99,14 @@ strong {
 }
 .copy a:hover {
     text-decoration: underline;
+}
+
+.news .title {
+    font-weight: bold;
+    color: #00ddff;
+}
+.news .author {
+    text-align: right;
 }
 @media screen and (max-width: 750px) {
     .menu {

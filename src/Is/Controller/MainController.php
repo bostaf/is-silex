@@ -1,6 +1,8 @@
 <?php
-namespace App;
 
+namespace Is\Controller;
+
+use Is\Service\News;
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
 
@@ -9,7 +11,7 @@ class MainController implements ControllerProviderInterface {
     public function connect(Application $app) {
         $factory = $app['controllers_factory'];
         /*
-        $factory->get('/','App\MainController::home');
+        $factory->get('/','Is\MainController::home');
         $factory->get('foo','MyApp\MyClassController::doFoo');
         */
         $factory->get('/', function () use ($app) {
@@ -39,6 +41,7 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/linki', function () use ($app) {
             return $app['twig']->render('linki.html.twig', array());
         })->bind('linki');
+        $factory->get('/aktualnosci','Is\Controller\MainController::aktualnosci')->bind('aktualnosci');
         $factory->get('/hello/{name}', function ($name) use ($app) {
             return $app['twig']->render('index.html.twig', array(
                 'name' => $name,
@@ -47,8 +50,12 @@ class MainController implements ControllerProviderInterface {
         return $factory;
     }
 
-    public function home() {
-        return 'Hello world';
+    public function aktualnosci(Application $app) {
+        $news = new News($app['config']['data']['news']['dir'], $app['config']['data']['news']['file_regex']);
+
+        return $app['twig']->render('aktualnosci.html.twig', array(
+            'news' => $news->getNews()
+        ));
     }
 
     public function doFoo() {
