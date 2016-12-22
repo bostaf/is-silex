@@ -1,8 +1,14 @@
 {% extends 'base.html.twig' %}
+{% block content_class_name %}news{% endblock %}
 
 {% block content %}
 <h1>Aktualności</h1>
 <hr>
-    <pre>{{ dump(news) }}</pre>
+    {% for key,item in news %}
+        <time class="title timeago" datetime="{{ item['date'] }}">{{ item['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
+        <div class="body">{{ item['contents']|raw }}</div>
+        <div class="author">[{{ item['author']|raw }}]</div>
+        <br><br>
+    {% endfor %}
 
 {% endblock %}

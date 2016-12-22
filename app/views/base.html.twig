@@ -12,6 +12,18 @@
     <link rel="stylesheet" type="text/css" href="../web/css/style-ie.css?v=1.0" />
     <![endif]-->
 
+    <script
+            src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.3/jquery.timeago.min.js"></script>
+    <script src="../web/js/jquery.timeago.pl.js?v=1.0"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            $("time.timeago").timeago();
+        });
+        jQuery.timeago.settings.cutoff = 1000*60*60*24*365;
+    </script>
     <!--[if lt IE 9]>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
     <![endif]-->
@@ -41,7 +53,7 @@
         <a href="{{ path('o-stronie') }}">O stronie</a><br>
         <a href="../src/index.html">Stare WWW</a><br>
     </div>
-    <div class="content">
+    <div class="content {% block content_class_name %}{% endblock %}">
         {% block content %}{% endblock %}
     </div>
 </div>

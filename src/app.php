@@ -21,6 +21,10 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../app/views',
 ));
 
+$app->extend('twig', function($twig, $app) {
+    $twig->addExtension(new Twig_Extensions_Extension_Intl());
+    return $twig;
+});
 
 // Controller
 $app->mount('/', new Is\Controller\MainController());
