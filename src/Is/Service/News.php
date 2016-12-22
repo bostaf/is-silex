@@ -28,17 +28,19 @@ class News
 
         $files = array();
         while ($file = readdir($dir_handle)) {
-            if (preg_match($this->getFileRegex(), $file, $file_array)) {
-                $file_array[0] = $this->getDir() . '/'. $file;
-                $fp = fopen($file_array[0], 'r');
-                $file_array[5] = fread ($fp, filesize($file_array[0]));
+            if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
+                $newsDate = new \DateTime($fileNameArray[1].'-'.$fileNameArray[2].'-'.$fileNameArray[3]);
+                $files[$file]['date'] = $newsDate->format('c');
+                $files[$file]['author'] = $fileNameArray[4];
+                $files[$file]['full_path'] = $this->getDir() . '/'. $file;
+                $fp = fopen($files[$file]['full_path'], 'r');
+                $files[$file]['contents'] = fread($fp, filesize($files[$file]['full_path']));
                 fclose ($fp);
-                $files[$file]=$file_array;
             }
         }
         closedir($dir_handle);
 
-        ksort ($files);
+        krsort ($files);
         return $files;
     }
 
