@@ -108,6 +108,28 @@ ul {
 .news .author {
     text-align: right;
 }
+.members {
+    text-align: left;
+}
+span.member_new {
+    color: yellow;
+}
+span.member_promotion {
+    color: #00ff00;
+}
+span.member_degradation {
+    color: #ff3333;
+}
+.members_clevel_section {
+    padding-bottom: 1em;
+}
+.members_member span:first-child, .members_member span:nth-child(2), .members_member span:nth-child(4) {
+    font-size: 0.8em;
+}
+.members_member span:nth-child(4) {
+    color: #2288bb;
+}
+
 @media screen and (max-width: 750px) {
     .menu {
         display: none;

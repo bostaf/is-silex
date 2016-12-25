@@ -68,7 +68,8 @@ class MainController implements ControllerProviderInterface {
         );
 
         return $app['twig']->render('misiaki.html.twig', array(
-            'misiaki' => $members->getMembers()
+            'misiaki' => $members->getMembers(),
+            'config' => $app['config']['members']
         ));
     }
 

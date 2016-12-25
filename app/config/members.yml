@@ -1,0 +1,131 @@
+members:
+  clevels:
+    0: Czart Wcielony
+    1: Naczelnik Kotłowni
+    2: Operator Chochli
+    3: Palacz Kotłowy
+    4: Dostawca Smoły
+    5: Szeregowy Widlarz
+    6: Skrobacz Cyrografów
+    7: Podstępny Werbownik
+    8: Fałszywy Prorok
+    9: Zniewolona Duszyczka
+    10: Emerytowane Diabelstwo
+    
+  professions_male:
+    Mag: Czarnoksiężnik
+    Nec: Nekromanta
+    Cle: Kapłan
+    War: Wojownik
+    Dru: Druid
+    Thi: Złodziej
+    Vam: Wampir
+    Aug: Wróżbita
+    Ran: Obieżyświat
+    Psi: Psionik
+  
+  professions_female:
+    Mag: Czarodziejka
+    Nec: Nekromantka
+    Cle: Kapłanka
+    War: Wojowniczka
+    Dru: Druidka
+    Thi: Złodziejka
+    Vam: Wampirzyca
+    Aug: Wróżbitka
+    Ran: Obieżyświatka
+    Psi: Psioniczka
+
+  females:
+    - Lothien
+    - Triona
+    - Idril
+    - Kringe
+    - Vermiliona
+    - Evalore
+    - Leeloo
+    - Eiko
+    - Asterite
+    - Nerria
+    - Salmacis
+    - Quintane
+    - Isibeal
+    - Miriamelle
+    - Tauraja
+    - Darla
+    - Umbra
+    - Cirri
+    - Aynnara
+    - Sildra
+    - Kohrinn
+    - Jarre
+    - Laoise
+    - Visenna
+
+  titles:
+    Wizzi: Baron
+    Moer: Noble
+    Xand: Noble
+    Shamur: Baron
+    Bostaf: King
+    Deresh: Noble
+    Bergor: Baron
+    Elund: Noble
+    Ghalen: Noble
+    Solari: Count
+    Asgard: Sir
+    Forsaken: Noble
+    Domel: Sir
+    Gilthaus: Sir
+    Argyle: Sir
+    Mirk: Sir
+    Sigmund: Sir
+    Miriamelle: Noble
+    Stregobor: Noble
+    Wilhelm: Noble
+    Arion: Noble
+    Deornoth: Baron
+    Leeloo: Lady
+    Qnevven: Noble
+    Vermiliona: Lady
+    Salmacis: Lady
+    Dor: Sir
+    Nerria: Lady
+    Lessar: Noble
+    Thaer: Noble
+    Kraken: Noble
+    Hanael: Noble
+    Anathor: Noble
+    Grulk: Sir
+    Landor: Noble
+    Fallor: Sir
+    Rimmon: Noble
+    Balin: Noble
+    Skijlen: Count
+    Carnivor: Sir
+    Arland: Sir
+    Gawith: Sir
+    Hexus: Noble
+    Gayenn: Sir
+    Idril: Lady
+    Haver: Sir
+    Taniss: Sir
+    Oidnus: Sir
+    Jarre: Lady
+    Valderon: Sir
+    Gaeth: Sir
+    Salves: Sir
+    Piroth: Sir
+    Umbra: Lady
+    Azriel: Sir
+    Kohrinn: Lady
+    Evalore: Lady
+    Tristis: Sir
+    Eon: Sir
+    Leartes: Sir
+    Visenna: Noble
+    Falamir: Sir
+    Irothren: Sir
+    Blizor: Duke
+    Araadan: Greater Duke
+    Gytfryd: Baron

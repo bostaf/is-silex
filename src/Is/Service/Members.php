@@ -33,7 +33,7 @@ class Members
         while ($file = readdir($dir_handle)) {
             if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
                 $membersDate = new \DateTime($fileNameArray[1].'-'.$fileNameArray[2].'-'.$fileNameArray[3]);
-                $files[$file]['date'] = $membersDate->format('c');
+                $files[$file]['date'] = $membersDate;
             }
         }
         closedir($dir_handle);
@@ -42,6 +42,7 @@ class Members
 
         $current = array_slice($files, 0, 1);
         $currentFileName = key($current);
+        $currentDate = $current[$currentFileName]['date'];
         $current = $current[$currentFileName];
         $lines = file($this->getDir() . $currentFileName);
         foreach ($lines as $line)
@@ -93,8 +94,18 @@ class Members
             }
         }
 
+        $members = array();
+        foreach ($current['members'] as $nick => $memberData) {
+            $members['members'][$memberData['clevel']][$nick]['level'] = $memberData['level'];
+            $members['members'][$memberData['clevel']][$nick]['rank'] = $memberData['rank'];
+            $members['members'][$memberData['clevel']][$nick]['profession'] = $memberData['profession'];
+            $members['members'][$memberData['clevel']][$nick]['clevel_status'] = $memberData['clevel_status'];
+            $members['members'][$memberData['clevel']][$nick]['level_status'] = $memberData['level_status'];
+            $members['members'][$memberData['clevel']][$nick]['clan_presence'] = $memberData['clan_presence'];
+        }
+        $members['date'] = $currentDate->format('c');
 
-        return $current;
+        return $members;
     }
 
     /**

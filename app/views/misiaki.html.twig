@@ -1,9 +1,52 @@
 {% extends 'base.html.twig' %}
+{% block content_class_name %}members{% endblock %}
 
 {% block content %}
 <h1>mISiaki</h1>
 <hr>
-{% for key,item in misiaki %}
-<pre>{{ dump(key, item) }}</pre>
-{% endfor %}
+    {% for clevel,member_data in misiaki['members'] %}
+        <div class="members_clevel_section">
+            <div><strong>{{ config['clevels'][clevel] }}</strong></div>
+            {% for nick,stats in member_data %}
+                <div class="members_member">
+                    <span class="
+                        {% if stats['clan_presence'] > 0 %}member_new
+                        {% else %}
+                            {% if stats['clevel_status'] > 0 %}member_promotion
+                            {% elseif stats['clevel_status'] < 0%}member_degradation
+                            {% endif %}
+                        {% endif %}
+                        ">
+                        [{{ clevel }}]
+                    </span>
+                    <span class="
+                        {% if stats['clan_presence'] > 0 %}member_new
+                        {% else %}
+                            {% if stats['level_status'] > 0 %}member_promotion
+                            {% elseif stats['level_status'] < 0%}member_degradation
+                            {% endif %}
+                        {% endif %}
+                        ">
+                        [{{ stats['level'] }}]
+                    </span>
+                    <span>{% if config['titles'][nick] is defined %}{{ config['titles'][nick] }} {% endif %}{{ nick }}</span>
+                    <span>
+                        {% if nick in config['females'] %}
+                            {{ config['professions_female'][stats['profession']] }}
+                        {% else %}
+                            {{ config['professions_male'][stats['profession']] }}
+                        {% endif %}
+                    </span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    Ostatnie outcasty:<br />
+    <br />
+<hr>
+    Znaczenie kolorów na liście mISiaków:<br />
+    <span class="member_promotion">[awans]</span>, <span class="member_degradation">[degradacja]</span>, <span class="member_new">[nowy klanowicz]</span><br />
+    Lista ostatnio uaktualniona <time class="title timeago" datetime="{{ misiaki['date'] }}">w {{ misiaki['date']|localizeddate('full', 'none', 'pl') }}</time>.
+
 {% endblock %}
