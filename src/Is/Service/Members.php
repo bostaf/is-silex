@@ -41,51 +41,55 @@ class Members
         krsort($files);
 
         $current = array_slice($files, 0, 1);
-        $lines = file($this->getDir() . key($current));
+        $currentFileName = key($current);
+        $current = $current[$currentFileName];
+        $lines = file($this->getDir() . $currentFileName);
         foreach ($lines as $line)
             if (preg_match($this->getLineRegexp(), $line, $lineArray)) {
                 $nick = trim($lineArray[4]);
-                $current[key($current)]['members'][$nick]['clevel'] = (int) $lineArray[1];
-                $current[key($current)]['members'][$nick]['level'] = (int) $lineArray[2];
-                $current[key($current)]['members'][$nick]['profession'] = (string) $lineArray[3];
-                $current[key($current)]['members'][$nick]['rank'] = trim($lineArray[5]);
-                $current[key($current)]['members'][$nick]['clan_presence'] = '';
-                $current[key($current)]['members'][$nick]['clevel_status'] = '';
-                $current[key($current)]['members'][$nick]['level_status'] = '';
+                $current['members'][$nick]['clevel'] = (int) $lineArray[1];
+                $current['members'][$nick]['level'] = (int) $lineArray[2];
+                $current['members'][$nick]['profession'] = (string) $lineArray[3];
+                $current['members'][$nick]['rank'] = trim($lineArray[5]);
+                $current['members'][$nick]['clan_presence'] = '';
+                $current['members'][$nick]['clevel_status'] = '';
+                $current['members'][$nick]['level_status'] = '';
             }
 
         $old = array_slice($files, 1, 1);
-        $lines = file($this->getDir() . key($old));
+        $oldFileName = key($old);
+        $old = $old[$oldFileName];
+        $lines = file($this->getDir() . $oldFileName);
         foreach ($lines as $line)
             if (preg_match($this->getLineRegexp(), $line, $lineArray)) {
                 $nick = trim($lineArray[4]);
-                $old[key($old)]['members'][$nick]['clevel'] = (int) $lineArray[1];
-                $old[key($old)]['members'][$nick]['level'] = (int) $lineArray[2];
-                $old[key($old)]['members'][$nick]['profession'] = (string) $lineArray[3];
-                $old[key($old)]['members'][$nick]['rank'] = trim($lineArray[5]);
+                $old['members'][$nick]['clevel'] = (int) $lineArray[1];
+                $old['members'][$nick]['level'] = (int) $lineArray[2];
+                $old['members'][$nick]['profession'] = (string) $lineArray[3];
+                $old['members'][$nick]['rank'] = trim($lineArray[5]);
             }
 
-        foreach ($current[key($current)]['members'] as $nick => $memberData) {
-            if (array_key_exists($nick, $old[key($old)]['members'])) {
+        foreach ($current['members'] as $nick => $memberData) {
+            if (array_key_exists($nick, $old['members'])) {
 
-                $current[key($current)]['members'][$nick]['clan_presence'] = 0;
+                $current['members'][$nick]['clan_presence'] = 0;
 
-                if ($current[key($current)]['members'][$nick]['clevel'] < $old[key($old)]['members'][$nick]['clevel'])
-                    $current[key($current)]['members'][$nick]['clevel_status'] = 1;
-                elseif ($current[key($current)]['members'][$nick]['clevel'] > $old[key($old)]['members'][$nick]['clevel'])
-                    $current[key($current)]['members'][$nick]['clevel_status'] = -1;
+                if ($current['members'][$nick]['clevel'] < $old['members'][$nick]['clevel'])
+                    $current['members'][$nick]['clevel_status'] = 1;
+                elseif ($current['members'][$nick]['clevel'] > $old['members'][$nick]['clevel'])
+                    $current['members'][$nick]['clevel_status'] = -1;
                 else
-                    $current[key($current)]['members'][$nick]['clevel_status'] = 0;
+                    $current['members'][$nick]['clevel_status'] = 0;
 
-                if ($current[key($current)]['members'][$nick]['level'] > $old[key($old)]['members'][$nick]['level'])
-                    $current[key($current)]['members'][$nick]['level_status'] = 1;
-                elseif ($current[key($current)]['members'][$nick]['level'] < $old[key($old)]['members'][$nick]['level'])
-                    $current[key($current)]['members'][$nick]['level_status'] = -1;
+                if ($current['members'][$nick]['level'] > $old['members'][$nick]['level'])
+                    $current['members'][$nick]['level_status'] = 1;
+                elseif ($current['members'][$nick]['level'] < $old['members'][$nick]['level'])
+                    $current['members'][$nick]['level_status'] = -1;
                 else
-                    $current[key($current)]['members'][$nick]['level_status'] = 0;
+                    $current['members'][$nick]['level_status'] = 0;
 
             } else {
-                $current[key($current)]['members'][$nick]['clan_presence'] = 1;
+                $current['members'][$nick]['clan_presence'] = 1;
             }
         }
 
