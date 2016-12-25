@@ -2,6 +2,7 @@
 
 namespace Is\Controller;
 
+use Is\Service\Members;
 use Is\Service\News;
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
@@ -60,8 +61,14 @@ class MainController implements ControllerProviderInterface {
     }
 
     public function misiaki(Application $app) {
+        $members = new Members(
+            $app['config']['data']['members']['dir'],
+            $app['config']['data']['members']['file_regex'],
+            $app['config']['data']['members']['line_regex']
+        );
+
         return $app['twig']->render('misiaki.html.twig', array(
-            'misiaki' => array()
+            'misiaki' => $members->getMembers()
         ));
     }
 
