@@ -42,11 +42,15 @@
         </div>
     {% endfor %}
 
-    Ostatnie outcasty:<br />
+    {% if misiaki['outcasts']|length > 0 %}
+        Ostatnie outcasty: {{ misiaki['outcasts']|join(', ') }}.
     <br />
+    <br />
+    {% endif %}
 <hr>
     Znaczenie kolorów na liście mISiaków:<br />
-    <span class="member_promotion">[awans]</span>, <span class="member_degradation">[degradacja]</span>, <span class="member_new">[nowy klanowicz]</span><br />
+    <span class="member_promotion">[awans]</span>, <span class="member_degradation">[degradacja]</span>, <span class="member_new">[nowy klanowicz]</span>
+    <br /><br />
     Lista ostatnio uaktualniona <time class="title timeago" datetime="{{ misiaki['date'] }}">w {{ misiaki['date']|localizeddate('full', 'none', 'pl') }}</time>.
 
 {% endblock %}
