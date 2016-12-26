@@ -4,4 +4,10 @@ app:
 data:
   news:
     dir: '../web/data/news'
-    file_regex: '/news-([0-9]{4})-([0-9]{2})-([0-9]{2})-([A-Z,a-z]*).txt/'
+    file_regex: '/news-([0-9]{4})-([0-9]{2})-([0-9]{2})-([A-Z,a-z]*)\.txt/'
+
+  members:
+    dir: '../web/data/members/'
+    file_regex: '/mem-([0-9]{4})-([0-9]{2})-([0-9]{2})\.txt/'
+    line_regex: '/^\| ([0-9]\s|10) \| ([1-5][0-9]) ([A-Z][a-z]{2}) ([A-Z][a-z\s]{14}) \| (.{44}) \|$/'
+    #                 (clevel....)    (level.....) (profession...) (name............)    (rank.)

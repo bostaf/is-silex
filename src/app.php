@@ -3,6 +3,7 @@ use Symfony\Component\Debug\ErrorHandler;
 
 
 $app->register(new Rpodwika\Silex\YamlConfigServiceProvider(__DIR__.'/../app/config/config.yml'));
+$app->register(new Rpodwika\Silex\YamlConfigServiceProvider(__DIR__.'/../app/config/members.yml'));
 $app['debug'] = $app['config']['app']['debug'];
 
 ErrorHandler::register();
