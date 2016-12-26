@@ -95,6 +95,16 @@ class Members
         }
 
         $members = array();
+        $members['outcasts'] = array();
+        $members['members'] = array();
+        $members['date'] = '';
+
+        foreach ($old['members'] as $nick => $memberData) {
+            if (!array_key_exists($nick, $current['members'])) {
+                $members['outcasts'][] = $nick;
+            }
+        }
+
         foreach ($current['members'] as $nick => $memberData) {
             $members['members'][$memberData['clevel']][$nick]['level'] = $memberData['level'];
             $members['members'][$memberData['clevel']][$nick]['rank'] = $memberData['rank'];
