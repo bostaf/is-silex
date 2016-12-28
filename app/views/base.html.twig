@@ -7,9 +7,9 @@
     <meta name="description" content="Oficjalna strona klau Infernal Seed działającego w świecie MUDa Cygnus Division" />
     <meta name="author" content="Grzegorz 'Bostaf' Szaliński" />
 
-    <link rel="stylesheet" type="text/css" href="../web/css/style.css?v=1.0" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('style.css', 'css') }}" />
     <!--[if lt IE 7]>
-    <link rel="stylesheet" type="text/css" href="../web/css/style-ie.css?v=1.0" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('style-ie.css', 'css') }}" />
     <![endif]-->
 
     <script
@@ -71,6 +71,6 @@
     <span class="copy"><a href="{{ path('o-stronie') }}">© maUa Bostafinka™ and Infernal Seed 2000-2017</a></span>
     </td>
 </div>
-<script src="../web/js/scripts.js?v=1.0"></script>
+<script src="{{ asset('scripts.js', 'js') }}"></script>
 </body>
 </html>

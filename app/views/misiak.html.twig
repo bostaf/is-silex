@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    {{ render(url('bios-menu')) }}
+    <h1>{{ misiak['name'] }}</h1>
+<hr>
+    {{ misiak['history']|raw }}
+
+
+{% endblock %}

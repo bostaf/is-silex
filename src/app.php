@@ -29,5 +29,15 @@ $app->extend('twig', function($twig, $app) {
 
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
+$app->register(new Silex\Provider\AssetServiceProvider(), array(
+    'assets.version' => 'v1',
+    'assets.version_format' => '%s?version=%s',
+    'assets.named_packages' => array(
+        'css' => array('version' => 'css3', 'base_path' => '/css'),
+        'js' => array('base_path' => '/js'),
+        'img' => array('base_path' => '/img'),
+    ),
+));
+
 // Controller
 $app->mount('/', new Is\Controller\MainController());

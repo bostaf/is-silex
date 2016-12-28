@@ -11,10 +11,7 @@ class MainController implements ControllerProviderInterface {
 
     public function connect(Application $app) {
         $factory = $app['controllers_factory'];
-        /*
-        $factory->get('/','Is\MainController::home');
-        $factory->get('foo','MyApp\MyClassController::doFoo');
-        */
+
         $factory->get('/', function () use ($app) {
             return $app['twig']->render('powitanie.html.twig', array());
         })->bind('powitanie');
@@ -45,6 +42,7 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/aktualnosci', 'Is\Controller\MainController::aktualnosci')->bind('aktualnosci');
         $factory->get('/misiaki', 'Is\Controller\MainController::misiaki')->bind('misiaki');
         $factory->get('/bios', 'Is\Controller\MainController::biosMenu')->bind('bios-menu');
+        $factory->get('/misiak/{misiak}', 'Is\Controller\MainController::historiaMisiaka')->bind('historia-misiaka');
         return $factory;
     }
 
@@ -85,8 +83,16 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
-    public function doFoo() {
-        return 'Bar';
-    }
+    public function historiaMisiaka(Application $app, $misiak)
+    {
+        $bios = new Members(
+            $app['config']['data']['bios']['dir'],
+            $app['config']['data']['bios']['file_regex'],
+            ''
+        );
 
+        return $app['twig']->render('misiak.html.twig', array(
+            'misiak' => $bios->getMemberData($misiak)
+        ));
+    }
 }
