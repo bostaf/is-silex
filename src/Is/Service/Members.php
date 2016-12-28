@@ -118,6 +118,41 @@ class Members
         return $members;
     }
 
+    public function getMembersWithBios()
+    {
+        $dir_handle = opendir($this->getDir());
+
+        $files = array();
+        while ($file = readdir($dir_handle)) {
+            if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
+                $files[] = $fileNameArray[1];
+            }
+        }
+        closedir($dir_handle);
+
+        sort($files);
+
+        return $files;
+    }
+
+    public function getMemberData($misiak)
+    {
+        $membersData = array();
+        $dir_handle = opendir($this->getDir());
+
+        while ($file = readdir($dir_handle)) {
+            if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
+                if ($fileNameArray[1] == $misiak) {
+                    $membersData['name'] = $misiak;
+                    $membersData['history'] = file_get_contents($this->getDir() . $file);
+                }
+            }
+        }
+        closedir($dir_handle);
+
+        return $membersData;
+    }
+
     /**
      * @return string
      */
