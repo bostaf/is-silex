@@ -27,5 +27,7 @@ $app->extend('twig', function($twig, $app) {
     return $twig;
 });
 
+$app->register(new Silex\Provider\HttpFragmentServiceProvider());
+
 // Controller
 $app->mount('/', new Is\Controller\MainController());

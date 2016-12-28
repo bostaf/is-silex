@@ -42,17 +42,14 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/linki', function () use ($app) {
             return $app['twig']->render('linki.html.twig', array());
         })->bind('linki');
-        $factory->get('/aktualnosci','Is\Controller\MainController::aktualnosci')->bind('aktualnosci');
-        $factory->get('/misiaki','Is\Controller\MainController::misiaki')->bind('misiaki');
-        $factory->get('/hello/{name}', function ($name) use ($app) {
-            return $app['twig']->render('index.html.twig', array(
-                'name' => $name,
-            ));
-        })->bind('hello');
+        $factory->get('/aktualnosci', 'Is\Controller\MainController::aktualnosci')->bind('aktualnosci');
+        $factory->get('/misiaki', 'Is\Controller\MainController::misiaki')->bind('misiaki');
+        $factory->get('/bios', 'Is\Controller\MainController::biosMenu')->bind('bios-menu');
         return $factory;
     }
 
-    public function aktualnosci(Application $app) {
+    public function aktualnosci(Application $app)
+    {
         $news = new News($app['config']['data']['news']['dir'], $app['config']['data']['news']['file_regex']);
 
         return $app['twig']->render('aktualnosci.html.twig', array(
@@ -60,7 +57,8 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
-    public function misiaki(Application $app) {
+    public function misiaki(Application $app)
+    {
         $members = new Members(
             $app['config']['data']['members']['dir'],
             $app['config']['data']['members']['file_regex'],
@@ -69,6 +67,20 @@ class MainController implements ControllerProviderInterface {
 
         return $app['twig']->render('misiaki.html.twig', array(
             'misiaki' => $members->getMembers(),
+            'config' => $app['config']['members']
+        ));
+    }
+
+    public function biosMenu(Application $app)
+    {
+        $bios = new Members(
+            $app['config']['data']['bios']['dir'],
+            $app['config']['data']['bios']['file_regex'],
+            ''
+        );
+
+        return $app['twig']->render('bios_menu.html.twig', array(
+            'bios' => $bios->getMembersWithBios(),
             'config' => $app['config']['members']
         ));
     }

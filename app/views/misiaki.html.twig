@@ -2,7 +2,8 @@
 {% block content_class_name %}members{% endblock %}
 
 {% block content %}
-<h1>mISiaki</h1>
+    {{ render(url('bios-menu')) }}
+    <h1>mISiaki</h1>
 <hr>
     {% for clevel,member_data in misiaki['members'] %}
         <div class="members_clevel_section">

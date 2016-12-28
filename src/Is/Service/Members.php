@@ -118,6 +118,23 @@ class Members
         return $members;
     }
 
+    public function getMembersWithBios()
+    {
+        $dir_handle = opendir($this->getDir());
+
+        $files = array();
+        while ($file = readdir($dir_handle)) {
+            if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
+                $files[] = $fileNameArray[1];
+            }
+        }
+        closedir($dir_handle);
+
+        sort($files);
+
+        return $files;
+    }
+
     /**
      * @return string
      */

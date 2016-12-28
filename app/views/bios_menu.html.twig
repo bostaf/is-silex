@@ -1,0 +1,8 @@
+<div class="bios">
+    <b>»&nbsp;Historie&nbsp;mISiaków</b><br>
+    <ul>
+        {% for misiak in bios %}
+        <li><a href="{{ url('bios-menu') }}">{% if config['titles'][misiak] is defined %}{{ config['titles'][misiak] }} {% endif %}{{ misiak }}</a></li>
+        {% endfor %}
+    </ul>
+</div>

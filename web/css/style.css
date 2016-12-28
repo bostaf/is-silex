@@ -58,6 +58,7 @@ ul {
     text-decoration: underline;
 }
 .content {
+    position: relative;
     float: right;
     width: 80%;
     text-align: justify;
@@ -128,6 +129,20 @@ span.member_degradation {
 }
 .members_member span:nth-child(4) {
     color: #2288bb;
+}
+.bios {
+    position: absolute;
+    right: 0;
+    top: 2.5em;
+    color: #ffff99;
+    font-size: 0.85em;
+}
+div.bios a {
+    color: #ffffcc;
+    text-decoration: none;
+}
+div.bios a:hover {
+    text-decoration: underline;
 }
 
 @media screen and (max-width: 750px) {
