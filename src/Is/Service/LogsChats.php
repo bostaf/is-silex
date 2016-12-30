@@ -15,6 +15,26 @@ class LogsChats
         $this->fileRegex = $fileRegex;
     }
 
+    public function getLogs()
+    {
+        $logs = array();
+        $dir_handle = opendir($this->getDir());
+
+        while ($file = readdir($dir_handle)) {
+            if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
+                $logDate = new \DateTime($fileNameArray[1]);
+                $logs[$fileNameArray[1]]['date'] = $logDate->format('c');
+                $f = fopen($this->getDir().$file, 'r');
+                $title = fgets($f);
+                fclose($f);
+                $logs[$fileNameArray[1]]['logs'][str_replace(['chat-', '.txt'], '', $file)] = $title;
+            }
+        }
+
+        rsort($logs);
+        return $logs;
+    }
+
     /**
      * @return string
      */

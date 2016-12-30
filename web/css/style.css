@@ -144,6 +144,14 @@ div.bios a {
 div.bios a:hover {
     text-decoration: underline;
 }
+.logs-chats .title {
+    font-weight: bold;
+}
+.logs-chats ul {
+    margin: 0.2em 0 1em 0;
+    list-style: none;
+}
+
 
 @media screen and (max-width: 750px) {
     .menu {

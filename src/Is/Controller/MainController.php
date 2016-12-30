@@ -2,6 +2,7 @@
 
 namespace Is\Controller;
 
+use Is\Service\LogsChats;
 use Is\Service\Members;
 use Is\Service\News;
 use Silex\Application;
@@ -33,6 +34,7 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/logi', function () use ($app) {
             return $app['twig']->render('logi.html.twig', array());
         })->bind('logi');
+        $factory->get('/logi/rozmowy', 'Is\Controller\MainController::chats')->bind('chats');
         $factory->get('/o-stronie', function () use ($app) {
             return $app['twig']->render('strona.html.twig', array());
         })->bind('o-stronie');
@@ -93,6 +95,18 @@ class MainController implements ControllerProviderInterface {
 
         return $app['twig']->render('misiak.html.twig', array(
             'misiak' => $bios->getMemberData($misiak)
+        ));
+    }
+
+    public function chats(Application $app)
+    {
+        $chats = new LogsChats(
+            $app['config']['data']['logs-chats']['dir'],
+            $app['config']['data']['logs-chats']['file_regex']
+        );
+
+        return $app['twig']->render('rozmowy.html.twig', array(
+            'chats' => $chats->getLogs()
         ));
     }
 }
