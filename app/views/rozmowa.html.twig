@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block content_class_name %}logs-chats{% endblock %}
+
+{% block content %}
+<h1>Logi - rozmowy</h1>
+<hr>
+    <div class="title">{{ rozmowa['title'] }}</div>
+    <br />
+    <pre>{{ rozmowa['contents'] }}</pre>
+    <div class="back-to-index"><a href="{{ path('rozmowy') }}">Powrót do spisu</a></div>
+{% endblock %}

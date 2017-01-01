@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+{% block content_class_name %}logs-chats{% endblock %}
+
+{% block content %}
+<h1>Logi - rozmowy</h1>
+<hr>
+    Daty są datami zamieszczenia logów na stronie a nie datami logowania.
+    <br />
+    <br />
+    {% for dateLogs in chats %}
+        <time class="title timeago" datetime="{{ dateLogs['date'] }}">{{ dateLogs['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
+        <br />
+        <ul>
+            {% for filename,title in dateLogs['logs'] %}
+                <li><a href="{{ path('rozmowa', {'id': filename}) }}">{{ title }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% endblock %}
