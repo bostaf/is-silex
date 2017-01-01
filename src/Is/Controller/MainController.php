@@ -34,7 +34,8 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/logi', function () use ($app) {
             return $app['twig']->render('logi.html.twig', array());
         })->bind('logi');
-        $factory->get('/logi/rozmowy', 'Is\Controller\MainController::chats')->bind('chats');
+        $factory->get('/logi/rozmowy', 'Is\Controller\MainController::rozmowy')->bind('rozmowy');
+        $factory->get('/logi/rozmowa/{id}', 'Is\Controller\MainController::rozmowa')->assert('id', '\d{4}-\d{2}-\d{2}-\d+')->bind('rozmowa');
         $factory->get('/o-stronie', function () use ($app) {
             return $app['twig']->render('strona.html.twig', array());
         })->bind('o-stronie');
@@ -44,7 +45,7 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/aktualnosci', 'Is\Controller\MainController::aktualnosci')->bind('aktualnosci');
         $factory->get('/misiaki', 'Is\Controller\MainController::misiaki')->bind('misiaki');
         $factory->get('/bios', 'Is\Controller\MainController::biosMenu')->bind('bios-menu');
-        $factory->get('/misiak/{misiak}', 'Is\Controller\MainController::historiaMisiaka')->bind('historia-misiaka');
+        $factory->get('/misiak/{misiak}', 'Is\Controller\MainController::historiaMisiaka')->assert('misiak', '[A-Za-z]+')->bind('historia-misiaka');
         return $factory;
     }
 
@@ -98,7 +99,7 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
-    public function chats(Application $app)
+    public function rozmowy(Application $app)
     {
         $chats = new LogsChats(
             $app['config']['data']['logs-chats']['dir'],
@@ -107,6 +108,18 @@ class MainController implements ControllerProviderInterface {
 
         return $app['twig']->render('rozmowy.html.twig', array(
             'chats' => $chats->getLogs()
+        ));
+    }
+
+    public function rozmowa(Application $app, $id)
+    {
+        $chats = new LogsChats(
+            $app['config']['data']['logs-chats']['dir'],
+            $app['config']['data']['logs-chats']['file_regex']
+        );
+
+        return $app['twig']->render('rozmowa.html.twig', array(
+            'rozmowa' => $chats->getChat($id)
         ));
     }
 }

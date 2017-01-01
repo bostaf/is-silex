@@ -35,6 +35,20 @@ class LogsChats
         return $logs;
     }
 
+    public function getChat($id)
+    {
+        $chat = array();
+
+        $fileName = 'chat-'.$id.'.txt';
+        $chatFile = file($this->getDir().$fileName);
+        $title = array_shift($chatFile);
+        $chat['title'] = $title;
+
+        $chat['contents'] = implode('', $chatFile);
+
+        return $chat;
+    }
+
     /**
      * @return string
      */
