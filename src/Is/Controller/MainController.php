@@ -5,6 +5,7 @@ namespace Is\Controller;
 use Is\Service\LogsChats;
 use Is\Service\Members;
 use Is\Service\News;
+use Is\Service\WhoIs;
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
 
@@ -36,9 +37,10 @@ class MainController implements ControllerProviderInterface {
         })->bind('logi');
         $factory->get('/logi/rozmowy', 'Is\Controller\MainController::rozmowy')->bind('rozmowy');
         $factory->get('/logi/rozmowa/{id}', 'Is\Controller\MainController::rozmowa')->assert('id', '\d{4}-\d{2}-\d{2}-\d+')->bind('rozmowa');
-        $factory->get('/logi-members', function () use ($app) {
+        $factory->get('/logi/members', function () use ($app) {
             return $app['twig']->render('logi-members.html.twig', array());
         })->bind('logi-members');
+        $factory->get('/logi/who-is', 'Is\Controller\MainController::whoIs')->bind('who-is');
         $factory->get('/o-stronie', function () use ($app) {
             return $app['twig']->render('strona.html.twig', array());
         })->bind('o-stronie');
@@ -123,6 +125,18 @@ class MainController implements ControllerProviderInterface {
 
         return $app['twig']->render('rozmowa.html.twig', array(
             'rozmowa' => $chats->getChat($id)
+        ));
+    }
+
+    public function whoIs(Application $app)
+    {
+        $logs = new WhoIs(
+            $app['config']['data']['logs-who-is']['dir'],
+            $app['config']['data']['logs-who-is']['file_regex']
+        );
+
+        return $app['twig']->render('logi-who-is.html.twig', array(
+            'logs' => $logs->getLogs()
         ));
     }
 }
