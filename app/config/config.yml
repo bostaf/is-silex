@@ -20,3 +20,7 @@ data:
     dir: '../web/data/logs-chats/'
     file_regex: '/^chat-([0-9]{4}-[0-9]{2}-[0-9]{2})-([0-9]+).txt$/'
     #                   (date......................) (lp....)
+
+  logs-who-is:
+    dir: '../web/data/who-is/'
+    file_regex: '/^who-is-([0-9]{4}-[0-9]{2}-[0-9]{2})-([0-9]{2})-([0-9]{2}).txt$/'
