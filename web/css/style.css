@@ -73,6 +73,9 @@ pre {
 .content a:hover {
     text-decoration: underline;
 }
+.content a.permalink {
+    color: #3399cc;
+}
 .group:after {
     content:"";
     display: table;

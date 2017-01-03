@@ -8,7 +8,8 @@
     <br />
     <br />
     {% for dateLogs in chats %}
-        <time class="title timeago" datetime="{{ dateLogs['date'] }}">{{ dateLogs['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
+        <time class="title timeago" datetime="{{ dateLogs['date'] }}" id="{{ dateLogs['date']|date('Y-m-d') }}">{{ dateLogs['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
+        <a href="#{{ dateLogs['date']|date('Y-m-d') }}" class="permalink">¶</a>
         <br />
         <ul>
             {% for filename,title in dateLogs['logs'] %}
