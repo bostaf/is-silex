@@ -11,3 +11,16 @@ data:
     file_regex: '/mem-([0-9]{4})-([0-9]{2})-([0-9]{2})\.txt/'
     line_regex: '/^\| ([0-9]\s|10) \| ([1-5][0-9]) ([A-Z][a-z]{2}) ([A-Z][a-z\s]{14}) \| (.{44}) \|$/'
     #                 (clevel....)    (level.....) (profession...) (name............)    (rank.)
+
+  bios:
+    dir: '../web/data/bios/'
+    file_regex: '/bio-([A-za-z]*).txt/'
+
+  logs-chats:
+    dir: '../web/data/logs-chats/'
+    file_regex: '/^chat-([0-9]{4}-[0-9]{2}-[0-9]{2})-([0-9]+).txt$/'
+    #                   (date......................) (lp....)
+
+  logs-who-is:
+    dir: '../web/data/who-is/'
+    file_regex: '/^who-is-([0-9]{4}-[0-9]{2}-[0-9]{2})-([0-9]{2})-([0-9]{2}).txt$/'

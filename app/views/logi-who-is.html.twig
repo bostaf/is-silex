@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block content_class_name %}logs-chats{% endblock %}
+
+{% block content %}
+<h1>Logi - who -=#IS#=-</h1>
+<hr>
+    {% for log in logs %}
+        <time class="title timeago" datetime="{{ log['date'] }}" id="{{ log['date']|date('Y-m-d') }}">{{ log['date']|localizeddate('full', 'short', 'pl')|capitalize }}</time>
+        <a href="#{{ log['date']|date('Y-m-d') }}" class="permalink">¶</a>
+        <br /><br />
+        {{ log['contents']|raw }}
+        <br />
+    {% endfor %}
+{% endblock %}

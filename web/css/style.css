@@ -39,6 +39,9 @@ strong {
 ul {
     padding-left: 1em;
 }
+pre {
+    font-size: 1.2em;
+}
 .naglowek {
     float: left;
     width: 100%;
@@ -58,6 +61,7 @@ ul {
     text-decoration: underline;
 }
 .content {
+    position: relative;
     float: right;
     width: 80%;
     text-align: justify;
@@ -68,6 +72,9 @@ ul {
 }
 .content a:hover {
     text-decoration: underline;
+}
+.content a.permalink {
+    color: #3399cc;
 }
 .group:after {
     content:"";
@@ -129,6 +136,32 @@ span.member_degradation {
 .members_member span:nth-child(4) {
     color: #2288bb;
 }
+.bios {
+    float: right;
+    margin: 0 0 0 1em;
+    padding: 2.6em 0 0 0.5em;
+    color: #ffff99;
+    font-size: 0.85em;
+}
+div.bios a {
+    color: #ffffcc;
+    text-decoration: none;
+}
+div.bios a:hover {
+    text-decoration: underline;
+}
+.logs-chats .title {
+    font-weight: bold;
+    color: #00ddff;
+}
+.logs-chats ul {
+    margin: 0.2em 0 1em 0;
+    list-style: none;
+}
+div.logs-chats div.back-to-index {
+    text-align: right;
+}
+
 
 @media screen and (max-width: 750px) {
     .menu {
