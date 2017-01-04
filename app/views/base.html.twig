@@ -3,9 +3,9 @@
 <html lang="pl">
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}Infernal Seed{% endblock %}</title>
+    <title>{% if page_title is defined %} {{ page_title }} - {% endif %} {% block title %}Infernal Seed{% endblock %}</title>
     <meta name="description" content="Oficjalna strona klau Infernal Seed działającego w świecie MUDa Cygnus Division" />
-    <meta name="author" content="Grzegorz 'Bostaf' Szaliński" />
+    <meta name="author" content="Grzegorz Szaliński 'Bostaf'" />
 
     <link rel="stylesheet" type="text/css" href="{{ asset('style.css', 'css') }}" />
     <!--[if lt IE 7]>
