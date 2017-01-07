@@ -2,8 +2,8 @@
 {% set page_title = 'Logi' %}
 
 {% block content %}
-<h1>{{ page_title }}</h1>
-<hr>
+    {{ parent() }}
+
     Logi podzielone są na trzy działy:
     <br><br>
     <strong><a href="{{ path('rozmowy') }}">rozmowy</a></strong> - ciekawe rozmowy zarejestrowane na kanale [is] i nie tylko

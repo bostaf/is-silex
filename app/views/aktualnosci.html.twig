@@ -3,8 +3,8 @@
 {% block content_class_name %}news{% endblock %}
 
 {% block content %}
-<h1>{{ page_title }}</h1>
-<hr>
+    {{ parent() }}
+
     {% for key,item in news %}
         <time class="title timeago" datetime="{{ item['date'] }}">{{ item['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
         <div class="body">{{ item['contents']|raw }}</div>

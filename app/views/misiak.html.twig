@@ -3,8 +3,8 @@
 
 {% block content %}
     {{ render(url('bios-menu')) }}
-    <h1>{{ page_title }}</h1>
-<hr>
+    {{ parent() }}
+
     {{ misiak['history']|raw }}
 
 

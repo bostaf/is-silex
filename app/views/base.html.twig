@@ -54,7 +54,10 @@
         <a href="../src/index.html">Stare WWW</a><br>
     </div>
     <div class="content {% block content_class_name %}{% endblock %}">
-        {% block content %}{% endblock %}
+        {% block content %}
+            <h1>{{ page_title }}</h1>
+            <hr>
+        {% endblock %}
     </div>
 </div>
 <div class="stopka">
