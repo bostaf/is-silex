@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
+{% set page_title = misiak['name'] %}
 
 {% block content %}
     {{ render(url('bios-menu')) }}
-    <h1>{{ misiak['name'] }}</h1>
-<hr>
+    {{ parent() }}
+
     {{ misiak['history']|raw }}
 
 

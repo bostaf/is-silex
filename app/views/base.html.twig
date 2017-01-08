@@ -3,9 +3,9 @@
 <html lang="pl">
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}Infernal Seed{% endblock %}</title>
+    <title>{% if page_title is defined %} {{ page_title }} - {% endif %} {% block title %}Infernal Seed{% endblock %}</title>
     <meta name="description" content="Oficjalna strona klau Infernal Seed działającego w świecie MUDa Cygnus Division" />
-    <meta name="author" content="Grzegorz 'Bostaf' Szaliński" />
+    <meta name="author" content="Grzegorz Szaliński 'Bostaf'" />
 
     <link rel="stylesheet" type="text/css" href="{{ asset('style.css', 'css') }}" />
     <!--[if lt IE 7]>
@@ -17,7 +17,7 @@
             integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.3/jquery.timeago.min.js"></script>
-    <script src="../web/js/jquery.timeago.pl.js?v=1.0"></script>
+    <script src="{{ asset('jquery.timeago.pol.js', 'js') }}"></script>
     <script type="text/javascript">
         jQuery(document).ready(function() {
             $("time.timeago").timeago();
@@ -33,7 +33,7 @@
 
 <div class="naglowek">&nbsp;</div>
 <div class="group">
-    <div class="menu">
+    <div class="menu" id="main_menu">
         <a href="{{ path('powitanie') }}">Powitanie</a><br>
         <a href="{{ path('aktualnosci') }}">Aktualności</a><br>
         <br>
@@ -54,7 +54,11 @@
         <a href="../src/index.html">Stare WWW</a><br>
     </div>
     <div class="content {% block content_class_name %}{% endblock %}">
-        {% block content %}{% endblock %}
+            <h1 class="viewport-small"><a href="#" onclick="toggleMenu();" class="box-shadow-menu">{{ page_title }}</a></h1>
+            <h1 class="viewport-standard">{{ page_title }}</h1>
+            <hr>
+        {% block content %}
+        {% endblock %}
     </div>
 </div>
 <div class="stopka">

@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
+{% set page_title = 'Logi: rozmowy' %}
 {% block content_class_name %}logs-chats{% endblock %}
 
 {% block content %}
-<h1>Logi - rozmowy</h1>
-<hr>
+    {{ parent() }}
+
     <div class="title">{{ rozmowa['title'] }}</div>
     <br />
     <pre>{{ rozmowa['contents'] }}</pre>

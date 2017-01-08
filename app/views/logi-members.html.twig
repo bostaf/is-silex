@@ -1,8 +1,9 @@
 {% extends 'base.html.twig' %}
+{% set page_title = 'Logi: members' %}
 
 {% block content %}
-<h1>Logi - members</h1>
-<hr>
+    {{ parent() }}
+
     Przedstawiamy kilka najstarszych logów komendy 'members'. Więcej dostępnych jest w sekcji <a href="{{ path('misiaki') }}">mISiaki</a>
     <br />
     <hr>

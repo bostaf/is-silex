@@ -1,17 +1,20 @@
 {% extends 'base.html.twig' %}
+{% set page_title = 'O stronie' %}
 
 {% block content %}
-<h1>O stronie</h1>
-<hr>
+    {{ parent() }}
+
     Lista ludzi odpowiedzialnych za stworzenie i aktualizację tej strony:
     <br><br>
     Bostaf - pomysł, projekt, grafika, wykonanie
     <br>
     Deresh - estetyka, kolorystyka
     <br>
-    Elund - skrypty php do działów "mISiaki" i "Aktualności"
+    Elund - inspiracja do mem-diffa w dziale mISiaki
     <br>
     Bergor i Ghalen - aktualizacja i psucie :&gt;
     <br>
     Kronin - hosting!
+    <br /><br />
+    Chcesz coś zasugerować / zmienić: <a href="https://github.com/bostaf/is-silex">współpraca na GitHubie</a>.
 {% endblock %}
