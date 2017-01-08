@@ -191,7 +191,10 @@ a.box-shadow-menu {
         display: block;
     }
 }
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 600px) {
+    html {
+        max-width: auto;
+    }
     .menu {
         float: none;
         width: auto;
@@ -207,5 +210,6 @@ a.box-shadow-menu {
     .content {
         float: none;
         width: auto;
+        text-align: left;
     }
 }
