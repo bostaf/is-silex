@@ -23,7 +23,7 @@ class News
         $this->fileRegex = $fileRegex;
     }
 
-    public function getNews() {
+    public function getNews($page = 'main') {
         $dir_handle = opendir($this->getDir());
 
         $files = array();
@@ -41,7 +41,12 @@ class News
         closedir($dir_handle);
 
         krsort ($files);
-        return $files;
+
+        if ($page == 'archiwum') {
+            return array_slice($files, 6, count($files));
+        } else {
+            return array_slice($files, 0, 6);
+        }
     }
 
     /**
