@@ -47,19 +47,20 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/linki', function () use ($app) {
             return $app['twig']->render('linki.html.twig', array());
         })->bind('linki');
-        $factory->get('/aktualnosci', 'Is\Controller\MainController::aktualnosci')->bind('aktualnosci');
+        $factory->get('/aktualnosci/{page}', 'Is\Controller\MainController::aktualnosci')->value('page', 'main')->bind('aktualnosci');
         $factory->get('/misiaki', 'Is\Controller\MainController::misiaki')->bind('misiaki');
         $factory->get('/bios', 'Is\Controller\MainController::biosMenu')->bind('bios-menu');
         $factory->get('/misiak/{misiak}', 'Is\Controller\MainController::historiaMisiaka')->assert('misiak', '[A-Za-z]+')->bind('historia-misiaka');
         return $factory;
     }
 
-    public function aktualnosci(Application $app)
+    public function aktualnosci(Application $app, $page)
     {
         $news = new News($app['config']['data']['news']['dir'], $app['config']['data']['news']['file_regex']);
 
         return $app['twig']->render('aktualnosci.html.twig', array(
-            'news' => $news->getNews()
+            'news' => $news->getNews($page),
+            'page' => $page
         ));
     }
 
