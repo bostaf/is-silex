@@ -12,4 +12,8 @@
         <br><br>
     {% endfor %}
 
+    {% if page == 'main' %}
+    <div><a href="{{ path('aktualnosci', {'page': 'archiwum'}) }}">Archiwum</a></div>
+    {% endif %}
+
 {% endblock %}
