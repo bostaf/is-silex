@@ -8,6 +8,7 @@ use Is\Service\News;
 use Is\Service\WhoIs;
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class MainController implements ControllerProviderInterface {
 
@@ -48,7 +49,7 @@ class MainController implements ControllerProviderInterface {
             return $app['twig']->render('linki.html.twig', array());
         })->bind('linki');
         $factory->get('/aktualnosci/{page}', 'Is\Controller\MainController::aktualnosci')->value('page', 'main')->bind('aktualnosci');
-        $factory->get('/misiaki', 'Is\Controller\MainController::misiaki')->bind('misiaki');
+        $factory->get('/misiaki/{firstLog}/{secondLog}', 'Is\Controller\MainController::misiaki')->value('firstLog', '')->value('secondLog', '')->bind('misiaki');
         $factory->get('/bios', 'Is\Controller\MainController::biosMenu')->bind('bios-menu');
         $factory->get('/misiak/{misiak}', 'Is\Controller\MainController::historiaMisiaka')->assert('misiak', '[A-Za-z]+')->bind('historia-misiaka');
         return $factory;
@@ -64,17 +65,27 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
-    public function misiaki(Application $app)
+    public function misiaki(Application $app, Request $request, $firstLog, $secondLog)
     {
+        $logsFromUrl['first'] = $request->attributes->get('firstLog');
+        $logsFromUrl['second'] = $request->attributes->get('secondLog');
+
         $members = new Members(
             $app['config']['data']['members']['dir'],
             $app['config']['data']['members']['file_regex'],
             $app['config']['data']['members']['line_regex']
         );
 
+        if ($firstLog != '' and $secondLog != '') {
+            $firstLog = 'mem-' . $firstLog . '.txt';
+            $secondLog = 'mem-' . $secondLog . '.txt';
+        }
+
         return $app['twig']->render('misiaki.html.twig', array(
-            'misiaki' => $members->getMembers(),
-            'config' => $app['config']['members']
+            'misiaki' => $members->getMembers($firstLog, $secondLog),
+            'config' => $app['config']['members'],
+            'files_list' => $members->getFiles(),
+            'logs_from_url' =>$logsFromUrl
         ));
     }
 
