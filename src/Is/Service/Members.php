@@ -35,8 +35,8 @@ class Members
         $members['outcasts'] = array();
         $members['members'] = array();
         $members['date'] = '';
-        $firstFileName = $firstList;
-        $secondFileName = $secondList;
+        $firstFileName = '';
+        $secondFileName = '';
         $first = array();
         $second = array();
 
@@ -68,14 +68,16 @@ class Members
         } else if ($secondList != '') { // File names given - just proceed directly to the files
 
             if (preg_match($this->getFileRegex(), $firstList, $fileNameArray)) {
-
+                $firstFileName = $firstList;
+                $secondFileName = $secondList;
+                $firstDate = new \DateTime($fileNameArray[1] . '-' . $fileNameArray[2] . '-' . $fileNameArray[3]);
             } else {
-                return false;
+                return [];
             }
 
         } else {
             // todo For the moment both files are required. Here's to determine second, if not given
-            return false;
+            return [];
         }
 
         $lines = file($this->getDir() . $firstFileName);
@@ -177,6 +179,29 @@ class Members
         closedir($dir_handle);
 
         return $membersData;
+    }
+
+    public function getFiles()
+    {
+        $files = array();
+        $dir_handle = opendir($this->getDir());
+        $i = 1;
+        while ($file = readdir($dir_handle)) {
+            if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
+                $dateFromFileName = new \DateTime($fileNameArray[1] . '-' . $fileNameArray[2] . '-' . $fileNameArray[3]);
+                $files[$i]['file_name_date_Ymd'] = $dateFromFileName->format('Y-m-d');
+                $files[$i]['file_date'] = $dateFromFileName->format('c');
+                $i++;
+            }
+        }
+        closedir($dir_handle);
+
+        usort($files, function($a, $b) {
+           return $a['file_name_date_Ymd'] > $b['file_name_date_Ymd'];
+        });
+        krsort($files);
+
+        return $files;
     }
 
     /**

@@ -6,7 +6,7 @@
     {{ render(url('bios-menu')) }}
     {{ parent() }}
 
-    {% for clevel,member_data in misiaki['members'] %}
+    {% for clevel, member_data in misiaki['members'] %}
         <div class="members_clevel_section">
             <div><strong>{{ config['clevels'][clevel] }}</strong></div>
             {% for nick,stats in member_data %}
@@ -49,10 +49,31 @@
     <br />
     <br />
     {% endif %}
-<hr>
+    <hr>
     Znaczenie kolorów na liście mISiaków:<br />
     <span class="member_promotion">[awans]</span>, <span class="member_degradation">[degradacja]</span>, <span class="member_new">[nowy klanowicz]</span>
     <br /><br />
     Lista ostatnio uaktualniona <time class="title timeago" datetime="{{ misiaki['date'] }}">w {{ misiaki['date']|localizeddate('full', 'none', 'pl') }}</time>.
-
+    <br /><br /><hr />
+    <br />
+    Porównaj
+    <select name="get-members-diff-select-first-log" id="get-members-diff-select-first-log">
+        {% for file in files_list %}
+            <option
+                    value="{{ file['file_name_date_Ymd'] }}"
+                    {% if file['file_name_date_Ymd'] == logs_from_url['first'] %}selected="selected"{% endif %}
+                    >{{ file['file_date']|localizeddate('long', 'none', 'pl') }}</option>
+        {% endfor %}
+    </select>
+    z
+    <select name="get-members-diff-select-second-log" id="get-members-diff-select-second-log">
+        {% for file in files_list %}
+            <option
+                    value="{{ file['file_name_date_Ymd'] }}"
+                    {% if file['file_name_date_Ymd'] == logs_from_url['second'] %}selected="selected"{% endif %}
+                    >{{ file['file_date']|localizeddate('long', 'none', 'pl') }}</option>
+        {% endfor %}
+    </select>
+    <button id="get-members-diff-button" onclick="window.location.href = '{{ path('misiaki') }}';" main_url="{{ path('misiaki') }}">Go!</button>
+    <br /><br />
 {% endblock %}
