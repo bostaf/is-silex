@@ -22,90 +22,118 @@ class Members
     }
 
     /**
-     * @return array Members with some stats
-     * @todo All in one currently but should be separated to allow comparison toggle and custom dates. Also currently it assumes there's at least 2 files in the dir...
+     * Compares two listings of the 'members' command - the first against the second.
+     *
+     * @param string $firstList Filename of the first listing. If blank - assumes the most recent listing available in the dir.
+     * @param string $secondList Filename of the second listing. If empty - assumes the most previous to the first.
+     * @return array Members with some clan stats
+     * @todo Add error handling - dirs, files, ...
      */
-    public function getMembers()
+    public function getMembers($firstList = '', $secondList = '')
     {
-        $dir_handle = opendir($this->getDir());
-
-        $files = array();
-        while ($file = readdir($dir_handle)) {
-            if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
-                $membersDate = new \DateTime($fileNameArray[1].'-'.$fileNameArray[2].'-'.$fileNameArray[3]);
-                $files[$file]['date'] = $membersDate;
-            }
-        }
-        closedir($dir_handle);
-
-        krsort($files);
-
-        $current = array_slice($files, 0, 1);
-        $currentFileName = key($current);
-        $currentDate = $current[$currentFileName]['date'];
-        $current = $current[$currentFileName];
-        $lines = file($this->getDir() . $currentFileName);
-        foreach ($lines as $line)
-            if (preg_match($this->getLineRegexp(), $line, $lineArray)) {
-                $nick = trim($lineArray[4]);
-                $current['members'][$nick]['clevel'] = (int) $lineArray[1];
-                $current['members'][$nick]['level'] = (int) $lineArray[2];
-                $current['members'][$nick]['profession'] = (string) $lineArray[3];
-                $current['members'][$nick]['rank'] = trim($lineArray[5]);
-                $current['members'][$nick]['clan_presence'] = '';
-                $current['members'][$nick]['clevel_status'] = '';
-                $current['members'][$nick]['level_status'] = '';
-            }
-
-        $old = array_slice($files, 1, 1);
-        $oldFileName = key($old);
-        $old = $old[$oldFileName];
-        $lines = file($this->getDir() . $oldFileName);
-        foreach ($lines as $line)
-            if (preg_match($this->getLineRegexp(), $line, $lineArray)) {
-                $nick = trim($lineArray[4]);
-                $old['members'][$nick]['clevel'] = (int) $lineArray[1];
-                $old['members'][$nick]['level'] = (int) $lineArray[2];
-                $old['members'][$nick]['profession'] = (string) $lineArray[3];
-                $old['members'][$nick]['rank'] = trim($lineArray[5]);
-            }
-
-        foreach ($current['members'] as $nick => $memberData) {
-            if (array_key_exists($nick, $old['members'])) {
-
-                $current['members'][$nick]['clan_presence'] = 0;
-
-                if ($current['members'][$nick]['clevel'] < $old['members'][$nick]['clevel'])
-                    $current['members'][$nick]['clevel_status'] = 1;
-                elseif ($current['members'][$nick]['clevel'] > $old['members'][$nick]['clevel'])
-                    $current['members'][$nick]['clevel_status'] = -1;
-                else
-                    $current['members'][$nick]['clevel_status'] = 0;
-
-                if ($current['members'][$nick]['level'] > $old['members'][$nick]['level'])
-                    $current['members'][$nick]['level_status'] = 1;
-                elseif ($current['members'][$nick]['level'] < $old['members'][$nick]['level'])
-                    $current['members'][$nick]['level_status'] = -1;
-                else
-                    $current['members'][$nick]['level_status'] = 0;
-
-            } else {
-                $current['members'][$nick]['clan_presence'] = 1;
-            }
-        }
-
         $members = array();
         $members['outcasts'] = array();
         $members['members'] = array();
         $members['date'] = '';
+        $firstFileName = '';
+        $secondFileName = '';
+        $first = array();
+        $second = array();
 
-        foreach ($old['members'] as $nick => $memberData) {
-            if (!array_key_exists($nick, $current['members'])) {
+        $dir_handle = opendir($this->getDir());
+
+        if ($firstList == '') { // Grab listings from the dir. Figure out the most recent (first) and the previous (second).
+
+            $files = array();
+            while ($file = readdir($dir_handle)) {
+                if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
+                    $membersDate = new \DateTime($fileNameArray[1] . '-' . $fileNameArray[2] . '-' . $fileNameArray[3]);
+                    $files[$file]['date'] = $membersDate;
+                }
+            }
+            closedir($dir_handle);
+
+            krsort($files);
+
+            $first = array_slice($files, 0, 1);
+            $second = array_slice($files, 1, 1);
+
+            $firstFileName = key($first);
+            $firstDate = $first[$firstFileName]['date'];
+            $first = $first[$firstFileName];
+
+            $secondFileName = key($second);
+            $second = $second[$secondFileName];
+
+        } else if ($secondList != '') { // File names given - just proceed directly to the files
+
+            if (preg_match($this->getFileRegex(), $firstList, $fileNameArray)) {
+                $firstFileName = $firstList;
+                $secondFileName = $secondList;
+                $firstDate = new \DateTime($fileNameArray[1] . '-' . $fileNameArray[2] . '-' . $fileNameArray[3]);
+            } else {
+                return [];
+            }
+
+        } else {
+            // todo For the moment both files are required. Here's to determine second, if not given
+            return [];
+        }
+
+        $lines = file($this->getDir() . $firstFileName);
+        foreach ($lines as $line)
+            if (preg_match($this->getLineRegexp(), $line, $lineArray)) {
+                $nick = trim($lineArray[4]);
+                $first['members'][$nick]['clevel'] = (int) $lineArray[1];
+                $first['members'][$nick]['level'] = (int) $lineArray[2];
+                $first['members'][$nick]['profession'] = (string) $lineArray[3];
+                $first['members'][$nick]['rank'] = trim($lineArray[5]);
+                $first['members'][$nick]['clan_presence'] = '';
+                $first['members'][$nick]['clevel_status'] = '';
+                $first['members'][$nick]['level_status'] = '';
+            }
+
+        $lines = file($this->getDir() . $secondFileName);
+        foreach ($lines as $line)
+            if (preg_match($this->getLineRegexp(), $line, $lineArray)) {
+                $nick = trim($lineArray[4]);
+                $second['members'][$nick]['clevel'] = (int) $lineArray[1];
+                $second['members'][$nick]['level'] = (int) $lineArray[2];
+                $second['members'][$nick]['profession'] = (string) $lineArray[3];
+                $second['members'][$nick]['rank'] = trim($lineArray[5]);
+            }
+
+        foreach ($first['members'] as $nick => $memberData) {
+            if (array_key_exists($nick, $second['members'])) {
+
+                $first['members'][$nick]['clan_presence'] = 0;
+
+                if ($first['members'][$nick]['clevel'] < $second['members'][$nick]['clevel'])
+                    $first['members'][$nick]['clevel_status'] = 1;
+                elseif ($first['members'][$nick]['clevel'] > $second['members'][$nick]['clevel'])
+                    $first['members'][$nick]['clevel_status'] = -1;
+                else
+                    $first['members'][$nick]['clevel_status'] = 0;
+
+                if ($first['members'][$nick]['level'] > $second['members'][$nick]['level'])
+                    $first['members'][$nick]['level_status'] = 1;
+                elseif ($first['members'][$nick]['level'] < $second['members'][$nick]['level'])
+                    $first['members'][$nick]['level_status'] = -1;
+                else
+                    $first['members'][$nick]['level_status'] = 0;
+
+            } else {
+                $first['members'][$nick]['clan_presence'] = 1;
+            }
+        }
+
+        foreach ($second['members'] as $nick => $memberData) {
+            if (!array_key_exists($nick, $first['members'])) {
                 $members['outcasts'][] = $nick;
             }
         }
 
-        foreach ($current['members'] as $nick => $memberData) {
+        foreach ($first['members'] as $nick => $memberData) {
             $members['members'][$memberData['clevel']][$nick]['level'] = $memberData['level'];
             $members['members'][$memberData['clevel']][$nick]['rank'] = $memberData['rank'];
             $members['members'][$memberData['clevel']][$nick]['profession'] = $memberData['profession'];
@@ -113,7 +141,7 @@ class Members
             $members['members'][$memberData['clevel']][$nick]['level_status'] = $memberData['level_status'];
             $members['members'][$memberData['clevel']][$nick]['clan_presence'] = $memberData['clan_presence'];
         }
-        $members['date'] = $currentDate->format('c');
+        $members['date'] = $firstDate->format('c');
 
         return $members;
     }
@@ -151,6 +179,29 @@ class Members
         closedir($dir_handle);
 
         return $membersData;
+    }
+
+    public function getFiles()
+    {
+        $files = array();
+        $dir_handle = opendir($this->getDir());
+        $i = 1;
+        while ($file = readdir($dir_handle)) {
+            if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
+                $dateFromFileName = new \DateTime($fileNameArray[1] . '-' . $fileNameArray[2] . '-' . $fileNameArray[3]);
+                $files[$i]['file_name_date_Ymd'] = $dateFromFileName->format('Y-m-d');
+                $files[$i]['file_date'] = $dateFromFileName->format('c');
+                $i++;
+            }
+        }
+        closedir($dir_handle);
+
+        usort($files, function($a, $b) {
+           return $a['file_name_date_Ymd'] > $b['file_name_date_Ymd'];
+        });
+        krsort($files);
+
+        return $files;
     }
 
     /**
