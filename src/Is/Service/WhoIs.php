@@ -20,12 +20,19 @@ class WhoIs
 
     private $fileRegex;
 
+    /**
+     * @param string $dir
+     * @param string $fileRegex
+     */
     public function __construct($dir, $fileRegex)
     {
         $this->dir = $dir;
         $this->fileRegex = $fileRegex;
     }
 
+    /**
+     * @return array
+     */
     public function getLogs()
     {
         $logs = array();

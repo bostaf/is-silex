@@ -10,13 +10,14 @@
 
 use Symfony\Component\Debug\ErrorHandler;
 
-
+// Service provider
 $app->register(new Rpodwika\Silex\YamlConfigServiceProvider(__DIR__.'/../app/config/config.yml'));
 $app->register(new Rpodwika\Silex\YamlConfigServiceProvider(__DIR__.'/../app/config/members.yml'));
 $app['debug'] = $app['config']['app']['debug'];
 
-ErrorHandler::register();
 //register an error handler
+// todo implement error handling for different error/exception categories (currently there's one common)
+ErrorHandler::register();
 $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug']) {
         return;
@@ -27,6 +28,7 @@ $app->error(function (\Exception $e, $code) use ($app) {
     return $app['twig']->render('_error.html.twig', []);
 });
 
+// Twig templating
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../app/views',
 ));
@@ -38,6 +40,7 @@ $app->extend('twig', function($twig, $app) {
 
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
+// Asset service provider
 $app->register(new Silex\Provider\AssetServiceProvider(), array(
     'assets.version' => 'v1',
     'assets.version_format' => '%s?version=%s',

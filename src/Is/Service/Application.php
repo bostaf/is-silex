@@ -13,6 +13,8 @@ namespace Is\Service;
 use Silex\Application as BaseApplication;
 
 /**
+ * Custom Application class for handling Traits
+ *
  * Class Application
  * @package Is\Service
  */

@@ -31,6 +31,10 @@ class News
         $this->fileRegex = $fileRegex;
     }
 
+    /**
+     * @param string $page
+     * @return array
+     */
     public function getNews($page = 'main') {
         $dir_handle = opendir($this->getDir());
 

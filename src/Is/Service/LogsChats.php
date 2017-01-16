@@ -20,12 +20,19 @@ class LogsChats
 
     private $fileRegex;
 
+    /**
+     * @param string $dir
+     * @param string $fileRegex
+     */
     public function __construct($dir, $fileRegex)
     {
         $this->dir = $dir;
         $this->fileRegex = $fileRegex;
     }
 
+    /**
+     * @return array
+     */
     public function getLogs()
     {
         $logs = array();
@@ -46,6 +53,10 @@ class LogsChats
         return $logs;
     }
 
+    /**
+     * @param string $id
+     * @return array
+     */
     public function getChat($id)
     {
         $chat = array();
