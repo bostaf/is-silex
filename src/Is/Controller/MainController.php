@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * This file is part of the Is package
+ *
+ * (c) Grzegorz Szaliński <grzegorz.szalinski@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Is\Controller;
 
 use Is\Service\LogsChats;
@@ -10,6 +17,10 @@ use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class MainController
+ * @package Is\Controller
+ */
 class MainController implements ControllerProviderInterface {
 
     public function connect(Application $app) {
