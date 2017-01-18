@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * This file is part of the Is package
+ *
+ * (c) Grzegorz Szaliński <grzegorz.szalinski@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace Is\Controller;
 
 use Is\Service\LogsChats;
@@ -10,8 +17,16 @@ use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class MainController
+ * @package Is\Controller
+ */
 class MainController implements ControllerProviderInterface {
 
+    /**
+     * @param Application $app
+     * @return mixed controllers_factory
+     */
     public function connect(Application $app) {
         $factory = $app['controllers_factory'];
 
@@ -55,6 +70,11 @@ class MainController implements ControllerProviderInterface {
         return $factory;
     }
 
+    /**
+     * @param Application $app
+     * @param string $page
+     * @return mixed
+     */
     public function aktualnosci(Application $app, $page)
     {
         $news = new News($app['config']['data']['news']['dir'], $app['config']['data']['news']['file_regex']);
@@ -65,6 +85,13 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
+    /**
+     * @param Application $app
+     * @param Request $request
+     * @param string $firstLog
+     * @param string $secondLog
+     * @return mixed
+     */
     public function misiaki(Application $app, Request $request, $firstLog, $secondLog)
     {
         $logsFromUrl['first'] = $request->attributes->get('firstLog');
@@ -89,6 +116,10 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
+    /**
+     * @param Application $app
+     * @return mixed
+     */
     public function biosMenu(Application $app)
     {
         $bios = new Members(
@@ -103,6 +134,11 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
+    /**
+     * @param Application $app
+     * @param string $misiak
+     * @return mixed
+     */
     public function historiaMisiaka(Application $app, $misiak)
     {
         $bios = new Members(
@@ -116,6 +152,10 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
+    /**
+     * @param Application $app
+     * @return mixed
+     */
     public function rozmowy(Application $app)
     {
         $chats = new LogsChats(
@@ -128,6 +168,11 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
+    /**
+     * @param Application $app
+     * @param string $id
+     * @return mixed
+     */
     public function rozmowa(Application $app, $id)
     {
         $chats = new LogsChats(
@@ -140,6 +185,10 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
+    /**
+     * @param Application $app
+     * @return mixed
+     */
     public function whoIs(Application $app)
     {
         $logs = new WhoIs(

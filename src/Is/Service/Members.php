@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the Is package
+ *
+ * (c) Grzegorz Szaliński <grzegorz.szalinski@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Is\Service;
 
@@ -14,6 +22,11 @@ class Members
 
     private $lineRegexp;
 
+    /**
+     * @param string $dir
+     * @param string $fileRegex
+     * @param string $lineRegex
+     */
     public function __construct($dir, $fileRegex, $lineRegex)
     {
         $this->dir = $dir;
@@ -146,6 +159,9 @@ class Members
         return $members;
     }
 
+    /**
+     * @return array
+     */
     public function getMembersWithBios()
     {
         $dir_handle = opendir($this->getDir());
@@ -163,6 +179,10 @@ class Members
         return $files;
     }
 
+    /**
+     * @param string $misiak
+     * @return array
+     */
     public function getMemberData($misiak)
     {
         $membersData = array();
@@ -181,6 +201,9 @@ class Members
         return $membersData;
     }
 
+    /**
+     * @return array
+     */
     public function getFiles()
     {
         $files = array();
