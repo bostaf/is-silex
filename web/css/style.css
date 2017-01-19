@@ -19,6 +19,7 @@ body {
     background-position: center top;
     background-size: 100% auto;
     font-size: 1em;
+    line-height: 1.2em;
 }
 h1 {
     text-align: center;
@@ -181,7 +182,23 @@ a.box-shadow-menu {
     0 0.3em 0 0 #ffff99,
     0 0.6em 0 0 #ffff99;
 }
-
+span.inline-code {
+    font-family: monospace, sans-serif;
+    font-size: 1em;
+    color: #00ccff;
+    border: 1px solid #3399cc;
+    border-radius: 3px;
+    padding: 0 3px;
+}
+div.zagraj {
+    text-align: center;
+    margin: 2em;
+    padding: 2em;
+    letter-spacing: 0.2em;
+}
+div.zagraj a {
+    color: #ff3333;
+}
 
 @media screen {
     .viewport-small {
