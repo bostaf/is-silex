@@ -67,6 +67,9 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/misiaki/{firstLog}/{secondLog}', 'Is\Controller\MainController::misiaki')->value('firstLog', '')->value('secondLog', '')->bind('misiaki');
         $factory->get('/bios', 'Is\Controller\MainController::biosMenu')->bind('bios-menu');
         $factory->get('/misiak/{misiak}', 'Is\Controller\MainController::historiaMisiaka')->assert('misiak', '[A-Za-z]+')->bind('historia-misiaka');
+        $factory->get('/cygnus-division', function () use ($app) {
+            return $app['twig']->render('cygnus.html.twig', array());
+        })->bind('cygnus-division');
         return $factory;
     }
 
