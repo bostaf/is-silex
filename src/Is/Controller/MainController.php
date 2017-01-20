@@ -70,6 +70,11 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/cygnus-division', function () use ($app) {
             return $app['twig']->render('cygnus.html.twig', array());
         })->bind('cygnus-division');
+
+        if ($app['config']['app']['require_https']) {
+            $factory->requireHttps();
+        }
+
         return $factory;
     }
 
