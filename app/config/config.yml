@@ -25,3 +25,7 @@ data:
   logs-who-is:
     dir: '../web/data/who-is/'
     file_regex: '/^who-is-([0-9]{4}-[0-9]{2}-[0-9]{2})-([0-9]{2})-([0-9]{2}).txt$/'
+
+  guestbook:
+    dir: '../web/data/guestbook/'
+    file_regex: '/^guestbook-([0-9]{4}-[0-9]{2}-[0-9]{2})-([0-9]{2})-([0-9]{2})-([0-9]{2}).txt$/'

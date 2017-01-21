@@ -1,0 +1,7 @@
+{% extends 'base.html.twig' %}
+{% set page_title = 'Księga gości' %}
+
+{% block content %}
+    {{ parent() }}
+    <pre>{{ dump(inscriptions) }}</pre>
+{% endblock %}

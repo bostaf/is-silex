@@ -9,6 +9,7 @@
  */
 namespace Is\Controller;
 
+use Is\Service\Guestbook;
 use Is\Service\LogsChats;
 use Is\Service\Members;
 use Is\Service\News;
@@ -70,6 +71,7 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/cygnus-division', function () use ($app) {
             return $app['twig']->render('cygnus.html.twig', array());
         })->bind('cygnus-division');
+        $factory->get('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbook')->value('page', 1)->bind('ksiega-gosci');
 
         if ($app['config']['app']['require_https']) {
             $factory->requireHttps();
@@ -206,6 +208,16 @@ class MainController implements ControllerProviderInterface {
 
         return $app['twig']->render('logi-who-is.html.twig', array(
             'logs' => $logs->getLogs()
+        ));
+    }
+
+    public function guestbook(Application $app, $page)
+    {
+        $inscriptions = new Guestbook($app['config']['data']['guestbook']['dir'], $app['config']['data']['guestbook']['file_regex']);
+
+        return $app['twig']->render('ksiega-gosci.html.twig', array(
+            'inscriptions' => $inscriptions->getInscriptions($page),
+            'page' => $page
         ));
     }
 }
