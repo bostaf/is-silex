@@ -72,6 +72,7 @@ class MainController implements ControllerProviderInterface {
             return $app['twig']->render('cygnus.html.twig', array());
         })->bind('cygnus-division');
         $factory->get('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbook')->value('page', 1)->bind('ksiega-gosci');
+        $factory->post('/ksiega-gosci', 'Is\Controller\MainController::guestbookAddPost');
 
         if ($app['config']['app']['require_https']) {
             $factory->requireHttps();
@@ -219,5 +220,11 @@ class MainController implements ControllerProviderInterface {
             'inscriptions' => $inscriptions->getInscriptions($page),
             'page' => $page
         ));
+    }
+
+    public function guestbookAddPost(Application $app, Request $request)
+    {
+        var_dump('<pre>', $request->request->all());die();
+        return $app->redirect($app->path('ksiega-gosci'));
     }
 }

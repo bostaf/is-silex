@@ -32,26 +32,45 @@ class Guestbook
     public function getInscriptions($page = 1) {
         $dir_handle = opendir($this->getDir());
 
-        $files = array();
+        $inscriptions = array();
         while ($file = readdir($dir_handle)) {
             if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
                 $newsDate = new \DateTime($fileNameArray[1].' '.$fileNameArray[2].':'.$fileNameArray[3].':'.$fileNameArray[4]);
-                $files[$file]['date'] = $newsDate->format('c');
-                $files[$file]['author'] = $fileNameArray[4];
-                $files[$file]['full_path'] = $this->getDir() . '/'. $file;
-                $fp = fopen($files[$file]['full_path'], 'r');
-                $files[$file]['contents'] = fread($fp, filesize($files[$file]['full_path']));
-                fclose ($fp);
+                $inscriptions[$file]['date'] = $newsDate->format('c');
+                $inscriptions[$file]['author'] = $fileNameArray[4];
+                $inscriptions[$file]['full_path'] = $this->getDir() . $file;
+                $contentsLines = file($inscriptions[$file]['full_path']);
+                $inscriptions[$file]['nick'] = '';
+                $inscriptions[$file]['email'] = '';
+                $inscriptions[$file]['url'] = '';
+                $inscriptions[$file]['contents'] = [];
+                foreach ($contentsLines as $line) {
+                    if (substr($line, 0, 5) == 'Nick:') {
+                        $inscriptions[$file]['nick'] = substr($line, 5, strlen($line) - 6);
+                    } elseif (substr($line, 0, 7) == 'Dodano:') {
+                        continue;
+                    } elseif (substr($line, 0, 4) == 'Url:') {
+                        $inscriptions[$file]['url'] = substr($line, 4, strlen($line) - 5);
+                    } elseif (substr($line, 0, 6) == 'Email:') {
+                        $inscriptions[$file]['email'] = substr($line, 6, strlen($line) - 7);
+                    } elseif (substr($line, 0, 5) == 'Wpis:') {
+                        $wpis[] = substr($line, 5, strlen($line) - 5);
+                    } else {
+                        $wpis[] = $line;
+                    }
+                }
+                $inscriptions[$file]['contents'] = join('', $wpis);
+                unset($wpis);
             }
         }
         closedir($dir_handle);
 
-        krsort ($files);
+        krsort ($inscriptions);
 
         if ($page == 'archiwum') {
-            return array_slice($files, 6, count($files));
+            return array_slice($inscriptions, 6, count($inscriptions));
         } else {
-            return array_slice($files, 0, 6);
+            return array_slice($inscriptions, 0, 6);
         }
     }
 

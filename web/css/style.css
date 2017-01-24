@@ -230,3 +230,50 @@ div.zagraj a {
         text-align: left;
     }
 }
+form {
+    margin: 1em 0;
+    padding: 0;
+}
+form fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+form fieldset p {
+    clear: both;
+    padding: 0.2em 0;
+}
+form fieldset p label {
+    display: inline-block;
+    width: 60px;
+    float: left;
+    text-align: right;
+    padding-right: 0.5em;
+}
+form fieldset p input[type='text'] {
+    width: 80%;
+    float: left;
+    border: 1px solid #3399cc;
+    font-family: inherit; font-size: inherit;
+    padding: 0.2em;
+    background-color: black;
+    color: #3399cc;
+}
+form fieldset p input[type='submit'] {
+    float: left;
+    border: 1px solid #3399cc;
+    font-family: inherit; font-size: inherit;
+    padding: 0.2em;
+    background-color: black;
+    color: #3399cc;
+}
+form fieldset p textarea {
+    width: 80%;
+    height: 100px;
+    float: left;
+    border: 1px solid #3399cc;
+    font-family: inherit; font-size: inherit;
+    padding: 0.2em;
+    background-color: black;
+    color: #3399cc;
+}

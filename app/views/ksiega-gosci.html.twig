@@ -3,5 +3,19 @@
 
 {% block content %}
     {{ parent() }}
-    <pre>{{ dump(inscriptions) }}</pre>
+    <form class="form" target="{{ path('ksiega-gosci') }}" method="post" name="guestbook-form">
+        <fieldset>
+            <p><label>Nick:</label><input type="text" name="guestbook-nick"></p>
+            <p><label>Wpis:</label><textarea name="guestbook-wpis"></textarea></p>
+            <p><label>&nbsp;</label><input type="submit" value="Wyślij"></p>
+        </fieldset>
+    </form>
+    {% for inscription in inscriptions %}
+        <strong>{{ inscription['nick'] }}</strong> {{ inscription['email'] }} {{ inscription['url'] }}
+        <br />
+        <time class="title timeago" datetime="{{ inscription['date'] }}">{{ inscription['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
+        <br />
+        {{ inscription['contents']|nl2br }}
+        <br /><br />
+    {% endfor %}
 {% endblock %}
