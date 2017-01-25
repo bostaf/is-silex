@@ -3,19 +3,43 @@
 
 {% block content %}
     {{ parent() }}
-    <form class="form" target="{{ path('ksiega-gosci') }}" method="post" name="guestbook-form">
-        <fieldset>
-            <p><label>Nick:</label><input type="text" name="guestbook-nick"></p>
-            <p><label>Wpis:</label><textarea name="guestbook-wpis"></textarea></p>
-            <p><label>&nbsp;</label><input type="submit" value="Wyślij"></p>
-        </fieldset>
-    </form>
+    <div id="guestbook-form-container" style="display: none;">
+        <form class="form" target="{{ path('ksiega-gosci') }}" method="post" name="guestbook-form">
+            <fieldset>
+                <p><label><span class="mandatory-parameter">*</span>Nick:</label><input type="text" name="guestbook-nick"></p>
+                <p><label>E-mail:</label><input type="text" name="guestbook-email"></p>
+                <p><label>Url:</label><input type="text" name="guestbook-url"></p>
+                <p><label><span class="mandatory-parameter">*</span>Wpis:</label><textarea name="guestbook-wpis"></textarea></p>
+                <p><label>&nbsp;</label><input type="submit" value="Wyślij"><input type="reset" value="Anuluj" id="guestbook-form-button-reset"></p>
+            </fieldset>
+        </form>
+    </div>
+    <div id="guestbook-form-toggler">
+        <a href="#" id="guestbook-form-toggler-button">Dodaj wpis</a>
+    </div>
+    <ul class="pager">
+        {% set prev = max(global.request.get('page') - 1, 1) %}
+        {% set next = min(global.request.get('page') + 1, pages) %}
+        <li><a href="{{ path('ksiega-gosci', {'page': prev}) }}"><</a></li>
+        {% for i in 1..pages %}
+            <li><a href="{{ path('ksiega-gosci', {'page': i}) }}">{% if global.request.get('page') == i %}<b>{% endif %}{{ i }}{% if global.request.get('page') == i %}</b>{% endif %}</a></li>
+        {% endfor %}
+        <li><a href="{{ path('ksiega-gosci', {'page': next}) }}">></a></li>
+    </ul>
     {% for inscription in inscriptions %}
-        <strong>{{ inscription['nick'] }}</strong> {{ inscription['email'] }} {{ inscription['url'] }}
-        <br />
-        <time class="title timeago" datetime="{{ inscription['date'] }}">{{ inscription['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
-        <br />
-        {{ inscription['contents']|nl2br }}
-        <br /><br />
+        <div class="guestbook-post">
+            <ul>
+                <li><strong>{{ inscription['nick'] }}</strong> {{ inscription['email'] }} {{ inscription['url'] }}</li>
+                <li><time class="title timeago" datetime="{{ inscription['date'] }}">{{ inscription['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time></li>
+            </ul>
+            <p>{{ inscription['contents']|nl2br }}</p>
+        </div>
     {% endfor %}
+    <ul class="pager">
+        <li><a href="{{ path('ksiega-gosci', {'page': prev}) }}"><</a></li>
+        {% for i in 1..pages %}
+            <li><a href="{{ path('ksiega-gosci', {'page': i}) }}">{% if global.request.get('page') == i %}<b>{% endif %}{{ i }}{% if global.request.get('page') == i %}</b>{% endif %}</a></li>
+        {% endfor %}
+        <li><a href="{{ path('ksiega-gosci', {'page': next}) }}">></a></li>
+    </ul>
 {% endblock %}

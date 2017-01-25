@@ -2,6 +2,9 @@ app:
   debug: true
   require_https: false
 
+guestbook:
+  posts_per_page: 12
+
 data:
   news:
     dir: '../web/data/news'

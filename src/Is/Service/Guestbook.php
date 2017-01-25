@@ -20,13 +20,16 @@ class Guestbook
 
     private $fileRegex;
 
+    private  $postsPerPage;
+
     /**
      * @param string $dir New directory
      * @param string $fileRegex Regex for file name mask
      */
-    public function __construct($dir, $fileRegex) {
+    public function __construct($dir, $fileRegex, $postsPerPage) {
         $this->dir = $dir;
         $this->fileRegex = $fileRegex;
+        $this->postsPerPage = $postsPerPage;
     }
 
     public function getInscriptions($page = 1) {
@@ -67,13 +70,19 @@ class Guestbook
 
         krsort ($inscriptions);
 
-        if ($page == 'archiwum') {
-            return array_slice($inscriptions, 6, count($inscriptions));
-        } else {
-            return array_slice($inscriptions, 0, 6);
-        }
+        return array_slice($inscriptions, ($page - 1) * $this->getPostsPerPage(), $this->getPostsPerPage());
     }
 
+    /**
+     * @return int
+     */
+    public function getNumberOfPages()
+    {
+        $dir_handle = opendir($this->getDir());
+        $i = 0;
+        while ($file = readdir($dir_handle)) if (preg_match($this->getFileRegex(), $file)) $i++;
+        return (int) ceil($i / $this->getPostsPerPage());
+    }
 
     /**
      * @return string
@@ -87,5 +96,13 @@ class Guestbook
      */
     public function getFileRegex() {
         return $this->fileRegex;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPostsPerPage()
+    {
+        return $this->postsPerPage;
     }
 }

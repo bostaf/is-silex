@@ -72,7 +72,7 @@ class MainController implements ControllerProviderInterface {
             return $app['twig']->render('cygnus.html.twig', array());
         })->bind('cygnus-division');
         $factory->get('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbook')->value('page', 1)->bind('ksiega-gosci');
-        $factory->post('/ksiega-gosci', 'Is\Controller\MainController::guestbookAddPost');
+        $factory->post('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbookAddPost')->value('page', 1);
 
         if ($app['config']['app']['require_https']) {
             $factory->requireHttps();
@@ -214,17 +214,35 @@ class MainController implements ControllerProviderInterface {
 
     public function guestbook(Application $app, $page)
     {
-        $inscriptions = new Guestbook($app['config']['data']['guestbook']['dir'], $app['config']['data']['guestbook']['file_regex']);
+        $inscriptions = new Guestbook(
+            $app['config']['data']['guestbook']['dir'],
+            $app['config']['data']['guestbook']['file_regex'],
+            $app['config']['guestbook']['posts_per_page']
+        );
 
         return $app['twig']->render('ksiega-gosci.html.twig', array(
             'inscriptions' => $inscriptions->getInscriptions($page),
-            'page' => $page
+            'page' => $page,
+            'pages' => $inscriptions->getNumberOfPages()
         ));
     }
 
-    public function guestbookAddPost(Application $app, Request $request)
+    public function guestbookAddPost(Application $app, Request $request, $page)
     {
-        var_dump('<pre>', $request->request->all());die();
+        $inscriptions = new Guestbook(
+            $app['config']['data']['guestbook']['dir'],
+            $app['config']['data']['guestbook']['file_regex'],
+            $app['config']['guestbook']['posts_per_page']
+        );
+
+        $date = new \DateTime('now');
+        $data[] = 'Nick:' . substr($request->request->get('guestbook-nick'), 0, 25) . PHP_EOL;
+        $data[] = 'Dodano:' . $date->format('Y-m-d (H:i:s)') . PHP_EOL;
+        $data[] = 'Url:' . substr($request->request->get('guestbook-url'), 0, 25) . PHP_EOL;
+        $data[] = 'Email:' . substr($request->request->get('guestbook-email'), 0, 25) . PHP_EOL;
+        $data[] = 'Wpis:' . substr($request->request->get('guestbook-wpis'), 0, 1500) . PHP_EOL;
+        file_put_contents($inscriptions->getDir() . 'guestbook-' . $date->format('Y-m-d-H-i-s') . '.txt', $data);
+        //var_dump('<pre>', $request->request->all());die();
         return $app->redirect($app->path('ksiega-gosci'));
     }
 }
