@@ -4,6 +4,7 @@ app:
 
 guestbook:
   posts_per_page: 12
+  max_frequency: +5 minutes
 
 data:
   news:

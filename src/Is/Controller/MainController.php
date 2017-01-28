@@ -235,6 +235,15 @@ class MainController implements ControllerProviderInterface {
             $app['config']['guestbook']['posts_per_page']
         );
 
+        $lastPostDateOffset = $inscriptions->getDatetimeOfLatestPost()->modify($app['config']['guestbook']['max_frequency']);
+        if ($lastPostDateOffset > new \DateTime('now')) {
+            return $app['twig']->render('ksiega-gosci.html.twig', array(
+                'inscriptions' => $inscriptions->getInscriptions($page),
+                'page' => $page,
+                'pages' => $inscriptions->getNumberOfPages(),
+                'time_wait' => $lastPostDateOffset->diff(new \DateTime('now'))->format('%i minut')
+            ));
+        }
 
         if ( ! $inscriptions->addPost($request)) {
             return $app['twig']->render('ksiega-gosci.html.twig', array(

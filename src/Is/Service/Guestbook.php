@@ -17,10 +17,19 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Guestbook
 {
+    /**
+     * @var string
+     */
     private $dir;
 
+    /**
+     * @var string
+     */
     private $fileRegex;
 
+    /**
+     * @var int
+     */
     private  $postsPerPage;
 
     /**
@@ -103,8 +112,29 @@ class Guestbook
         $data[] = 'Email:' . substr(trim($request->request->get('guestbook-email')), 0, 25) . PHP_EOL;
         $data[] = 'Wpis:' . substr($wpis, 0, 1500) . PHP_EOL;
         file_put_contents($this->getDir() . 'guestbook-' . $date->format('Y-m-d-H-i-s') . '.txt', $data);
-        //var_dump('<pre>', $request->request->all());die();
         return true;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getDatetimeOfLatestPost()
+    {
+        $dir_handle = opendir($this->getDir());
+        $datetime = null;
+
+        while ($file = readdir($dir_handle)) {
+            if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
+                $newsDate = new \DateTime($fileNameArray[1].' '.$fileNameArray[2].':'.$fileNameArray[3].':'.$fileNameArray[4]);
+                if ($datetime === null) {
+                    $datetime = $newsDate;
+                } else {
+                    if ($datetime < $newsDate) $datetime = $newsDate;
+                }
+            }
+        }
+
+        return $datetime;
     }
 
     /**
