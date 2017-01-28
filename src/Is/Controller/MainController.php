@@ -9,6 +9,7 @@
  */
 namespace Is\Controller;
 
+use Is\Service\Guestbook;
 use Is\Service\LogsChats;
 use Is\Service\Members;
 use Is\Service\News;
@@ -70,6 +71,8 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/cygnus-division', function () use ($app) {
             return $app['twig']->render('cygnus.html.twig', array());
         })->bind('cygnus-division');
+        $factory->get('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbook')->value('page', 1)->bind('ksiega-gosci');
+        $factory->post('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbookAddPost')->value('page', 1);
 
         if ($app['config']['app']['require_https']) {
             $factory->requireHttps();
@@ -207,5 +210,50 @@ class MainController implements ControllerProviderInterface {
         return $app['twig']->render('logi-who-is.html.twig', array(
             'logs' => $logs->getLogs()
         ));
+    }
+
+    public function guestbook(Application $app, $page)
+    {
+        $inscriptions = new Guestbook(
+            $app['config']['data']['guestbook']['dir'],
+            $app['config']['data']['guestbook']['file_regex'],
+            $app['config']['guestbook']['posts_per_page']
+        );
+
+        return $app['twig']->render('ksiega-gosci.html.twig', array(
+            'inscriptions' => $inscriptions->getInscriptions($page),
+            'page' => $page,
+            'pages' => $inscriptions->getNumberOfPages()
+        ));
+    }
+
+    public function guestbookAddPost(Application $app, Request $request, $page)
+    {
+        $inscriptions = new Guestbook(
+            $app['config']['data']['guestbook']['dir'],
+            $app['config']['data']['guestbook']['file_regex'],
+            $app['config']['guestbook']['posts_per_page']
+        );
+
+        $lastPostDateOffset = $inscriptions->getDatetimeOfLatestPost()->modify($app['config']['guestbook']['max_frequency']);
+        if ($lastPostDateOffset > new \DateTime('now')) {
+            return $app['twig']->render('ksiega-gosci.html.twig', array(
+                'inscriptions' => $inscriptions->getInscriptions($page),
+                'page' => $page,
+                'pages' => $inscriptions->getNumberOfPages(),
+                'time_wait' => $lastPostDateOffset->diff(new \DateTime('now'))->format('%i minut')
+            ));
+        }
+
+        if ( ! $inscriptions->addPost($request)) {
+            return $app['twig']->render('ksiega-gosci.html.twig', array(
+                'inscriptions' => $inscriptions->getInscriptions($page),
+                'page' => $page,
+                'pages' => $inscriptions->getNumberOfPages(),
+                'errors' => true
+            ));
+        }
+
+        return $app->redirect($app->path('ksiega-gosci'));
     }
 }

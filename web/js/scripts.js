@@ -19,12 +19,28 @@ window.onload = function() {
         return e.options[e.selectedIndex].value;
     }
 
-    membersDiffSelectFirstLog.onchange = function() {
+    if (typeof membersDiffSelectFirstLog == undefined) membersDiffSelectFirstLog.onchange = function() {
         var url = membersDiffButton.getAttribute("main_url");
         membersDiffButton.setAttribute("onclick", "window.location.href = '" + url + "/" + getSelectValue(membersDiffSelectFirstLog) + "/" + getSelectValue(membersDiffSelectSecondLog) + "';");
     };
-    membersDiffSelectSecondLog.onchange = function() {
+    if (typeof membersDiffSelectSecondLog == undefined) membersDiffSelectSecondLog.onchange = function() {
         var url = membersDiffButton.getAttribute("main_url");
         membersDiffButton.setAttribute("onclick", "window.location.href = '" + url + "/" + getSelectValue(membersDiffSelectFirstLog) + "/" + getSelectValue(membersDiffSelectSecondLog) + "';");
     };
+
+    var guestbookButton = document.getElementById("guestbook-form-toggler-button");
+    var guestbookButtonContainer = document.getElementById("guestbook-form-toggler");
+    var guestbookContainer = document.getElementById("guestbook-form-container");
+    var guestbookReset = document.getElementById("guestbook-form-button-reset");
+    guestbookButton.onclick = function() {
+        if (guestbookContainer.style.display == "none" || guestbookContainer.style.display == "") {
+            guestbookContainer.style.display = "block";
+            guestbookButtonContainer.style.display = "none";
+        }
+        return false;
+    };
+    guestbookReset.onclick = function() {
+        guestbookContainer.style.display = "none";
+        guestbookButtonContainer.style.display = "block";
+    }
 };

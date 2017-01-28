@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% set page_title = 'Księga gości' %}
+
+{% block content %}
+    {{ parent() }}
+    <div id="guestbook-form-container" style="{% if errors is not defined and time_wait is not defined %}display: none;{% endif %}">
+        <form class="form" action="{{ path('ksiega-gosci') }}" method="post" name="guestbook-form">
+            <fieldset>
+                {% if time_wait is defined %}
+                <p>Poczekaj jeszcze {{ time_wait }} zanim wyślesz nowy wpis</p>
+                {% endif %}
+                <p>
+                    <label><span class="mandatory-parameter">*</span>Nick:</label>
+                    <span class="form-data">
+                        {% if errors is defined %}<span class="form-error">Pole "Nick" jest obowiązkowe.</span>{% endif %}
+                        <input type="text" name="guestbook-nick">
+                    </span>
+                </p>
+                <p><label>E-mail:</label><span class="form-data"><input type="text" name="guestbook-email"></span></p>
+                <p><label>Url:</label><span class="form-data"><input type="text" name="guestbook-url"></span></p>
+                <p>
+                    <label><span class="mandatory-parameter">*</span>Wpis:</label>
+                    <span class="form-data">
+                        {% if errors is defined %}<span class="form-error">Pole "Wpis" jest obowiązkowe.</span>{% endif %}
+                        <textarea name="guestbook-wpis"></textarea>
+                    </span>
+                </p>
+                <p><label>&nbsp;</label><input type="submit" value="Wyślij"><input type="reset" value="Anuluj" id="guestbook-form-button-reset"></p>
+            </fieldset>
+        </form>
+    </div>
+    <div id="guestbook-form-toggler" style="{% if errors is defined or time_wait is defined %}display: none;{% endif %}">
+        <a href="#" id="guestbook-form-toggler-button">Dodaj wpis</a>
+    </div>
+    <ul class="pager">
+        {% set prev = max(global.request.get('page') - 1, 1) %}
+        {% set next = min(global.request.get('page') + 1, pages) %}
+        <li><a href="{{ path('ksiega-gosci', {'page': prev}) }}"><</a></li>
+        {% for i in 1..pages %}
+            <li><a href="{{ path('ksiega-gosci', {'page': i}) }}">{% if global.request.get('page') == i %}<b>{% endif %}{{ i }}{% if global.request.get('page') == i %}</b>{% endif %}</a></li>
+        {% endfor %}
+        <li><a href="{{ path('ksiega-gosci', {'page': next}) }}">></a></li>
+    </ul>
+    {% for inscription in inscriptions %}
+        <div class="guestbook-post">
+            <ul>
+                <li><strong>{{ inscription['nick'] }}</strong> {{ inscription['email'] }} {{ inscription['url'] }}</li>
+                <li><time class="title timeago" datetime="{{ inscription['date'] }}">{{ inscription['date']|localizeddate('full', 'short', 'pl')|capitalize }}</time></li>
+            </ul>
+            <p>{{ inscription['contents']|nl2br }}</p>
+        </div>
+    {% endfor %}
+    <ul class="pager">
+        <li><a href="{{ path('ksiega-gosci', {'page': prev}) }}"><</a></li>
+        {% for i in 1..pages %}
+            <li><a href="{{ path('ksiega-gosci', {'page': i}) }}">{% if global.request.get('page') == i %}<b>{% endif %}{{ i }}{% if global.request.get('page') == i %}</b>{% endif %}</a></li>
+        {% endfor %}
+        <li><a href="{{ path('ksiega-gosci', {'page': next}) }}">></a></li>
+    </ul>
+{% endblock %}

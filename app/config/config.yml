@@ -2,6 +2,10 @@ app:
   debug: true
   require_https: false
 
+guestbook:
+  posts_per_page: 12
+  max_frequency: +5 minutes
+
 data:
   news:
     dir: '../web/data/news'
@@ -25,3 +29,7 @@ data:
   logs-who-is:
     dir: '../web/data/who-is/'
     file_regex: '/^who-is-([0-9]{4}-[0-9]{2}-[0-9]{2})-([0-9]{2})-([0-9]{2}).txt$/'
+
+  guestbook:
+    dir: '../web/data/guestbook/'
+    file_regex: '/^guestbook-([0-9]{4}-[0-9]{2}-[0-9]{2})-([0-9]{2})-([0-9]{2})-([0-9]{2}).txt$/'
