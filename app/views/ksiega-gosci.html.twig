@@ -3,7 +3,7 @@
 
 {% block content %}
     {{ parent() }}
-    <div id="guestbook-form-container" style="display: none;">
+    <div id="guestbook-form-container" style="{% if errors is not defined %}display: none;{% endif %}">
         <form class="form" target="{{ path('ksiega-gosci') }}" method="post" name="guestbook-form">
             <fieldset>
                 <p><label><span class="mandatory-parameter">*</span>Nick:</label><input type="text" name="guestbook-nick"></p>

@@ -9,6 +9,7 @@
  */
 
 namespace Is\Service;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Guestbook
@@ -82,6 +83,28 @@ class Guestbook
         $i = 0;
         while ($file = readdir($dir_handle)) if (preg_match($this->getFileRegex(), $file)) $i++;
         return (int) ceil($i / $this->getPostsPerPage());
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    public function addPost(Request $request)
+    {
+        $date = new \DateTime('now');
+        $nick = trim($request->request->get('guestbook-nick'));
+        $wpis = trim($request->request->get('guestbook-wpis'));
+
+        if ($nick == '' or $wpis == '') return false;
+
+        $data[] = 'Nick:' . substr($nick, 0, 25) . PHP_EOL;
+        $data[] = 'Dodano:' . $date->format('Y-m-d (H:i:s)') . PHP_EOL;
+        $data[] = 'Url:' . substr(trim($request->request->get('guestbook-url')), 0, 25) . PHP_EOL;
+        $data[] = 'Email:' . substr(trim($request->request->get('guestbook-email')), 0, 25) . PHP_EOL;
+        $data[] = 'Wpis:' . substr($wpis, 0, 1500) . PHP_EOL;
+        file_put_contents($this->getDir() . 'guestbook-' . $date->format('Y-m-d-H-i-s') . '.txt', $data);
+        //var_dump('<pre>', $request->request->all());die();
+        return true;
     }
 
     /**

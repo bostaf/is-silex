@@ -235,14 +235,16 @@ class MainController implements ControllerProviderInterface {
             $app['config']['guestbook']['posts_per_page']
         );
 
-        $date = new \DateTime('now');
-        $data[] = 'Nick:' . substr($request->request->get('guestbook-nick'), 0, 25) . PHP_EOL;
-        $data[] = 'Dodano:' . $date->format('Y-m-d (H:i:s)') . PHP_EOL;
-        $data[] = 'Url:' . substr($request->request->get('guestbook-url'), 0, 25) . PHP_EOL;
-        $data[] = 'Email:' . substr($request->request->get('guestbook-email'), 0, 25) . PHP_EOL;
-        $data[] = 'Wpis:' . substr($request->request->get('guestbook-wpis'), 0, 1500) . PHP_EOL;
-        file_put_contents($inscriptions->getDir() . 'guestbook-' . $date->format('Y-m-d-H-i-s') . '.txt', $data);
-        //var_dump('<pre>', $request->request->all());die();
+
+        if ( ! $inscriptions->addPost($request)) {
+            return $app['twig']->render('ksiega-gosci.html.twig', array(
+                'inscriptions' => $inscriptions->getInscriptions($page),
+                'page' => $page,
+                'pages' => $inscriptions->getNumberOfPages(),
+                'errors' => true
+            ));
+        }
+
         return $app->redirect($app->path('ksiega-gosci'));
     }
 }
