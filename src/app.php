@@ -42,7 +42,7 @@ $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
 // Asset service provider
 $app->register(new Silex\Provider\AssetServiceProvider(), array(
-    'assets.version' => 'v2',
+    'assets.version' => 'v3',
     'assets.version_format' => '%s?version=%s',
     'assets.named_packages' => array(
         'css' => array('version' => 'css3', 'base_path' => '/css'),
