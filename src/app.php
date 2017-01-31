@@ -14,6 +14,7 @@ use Symfony\Component\Debug\ErrorHandler;
 $app->register(new Rpodwika\Silex\YamlConfigServiceProvider(__DIR__.'/../app/config/config.yml'));
 $app->register(new Rpodwika\Silex\YamlConfigServiceProvider(__DIR__.'/../app/config/members.yml'));
 $app['debug'] = $app['config']['app']['debug'];
+$app['env'] = $app['config']['app']['env'];
 
 //register an error handler
 // todo implement error handling for different error/exception categories (currently there's one common)

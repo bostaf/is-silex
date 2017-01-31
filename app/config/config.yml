@@ -1,6 +1,7 @@
 app:
   debug: true
   require_https: false
+  env: dev
 
 guestbook:
   posts_per_page: 12
