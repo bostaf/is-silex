@@ -2,7 +2,9 @@
 {% set page_title = 'Historia' %}
 
 {% block content %}
-    {{ render(url('bios-menu')) }}
+    {% if count_bios > 0 %}
+        {{ render(url('bios-menu')) }}
+    {% endif %}
     {{ parent() }}
 
     Na początku było słowo, a słowo miało dwa bajty i nie było nic więcej...
