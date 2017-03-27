@@ -34,9 +34,7 @@ class MainController implements ControllerProviderInterface {
         $factory->get('/', function () use ($app) {
             return $app['twig']->render('powitanie.html.twig', array());
         })->bind('powitanie');
-        $factory->get('/historia', function () use ($app) {
-            return $app['twig']->render('historia.html.twig', array());
-        })->bind('historia');
+        $factory->get('/historia', 'Is\Controller\MainController::historia')->bind('historia');
         $factory->get('/opis-klanu', function () use ($app) {
             return $app['twig']->render('opis-klanu.html.twig', array());
         })->bind('opis-klanu');
@@ -96,6 +94,20 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
+    public function historia(Application $app)
+    {
+        // check if there are any bios
+        $bios = new Members(
+            $app['config']['data']['bios']['dir'],
+            $app['config']['data']['bios']['file_regex'],
+            ''
+        );
+
+        return $app['twig']->render('historia.html.twig', array(
+            'count_bios' => count($bios->getMembersWithBios())
+        ));
+    }
+
     /**
      * @param Application $app
      * @param Request $request
@@ -105,6 +117,13 @@ class MainController implements ControllerProviderInterface {
      */
     public function misiaki(Application $app, Request $request, $firstLog, $secondLog)
     {
+        // check if there are any bios
+        $bios = new Members(
+            $app['config']['data']['bios']['dir'],
+            $app['config']['data']['bios']['file_regex'],
+            ''
+        );
+
         $logsFromUrl['first'] = $request->attributes->get('firstLog');
         $logsFromUrl['second'] = $request->attributes->get('secondLog');
 
@@ -123,7 +142,8 @@ class MainController implements ControllerProviderInterface {
             'misiaki' => $members->getMembers($firstLog, $secondLog),
             'config' => $app['config']['members'],
             'files_list' => $members->getFiles(),
-            'logs_from_url' =>$logsFromUrl
+            'logs_from_url' =>$logsFromUrl,
+            'count_bios' => count($bios->getMembersWithBios())
         ));
     }
 
