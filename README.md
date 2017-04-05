@@ -4,10 +4,7 @@ README
 Co to jest?
 ------------
 
-Strona domowa klanu Infernal Seed działającego w świece MUDa Cygnus Division.
-Jest to próba odświeżenia obecnej wersji strony [is.mud.pl][1]:
-* Framework Silex zamiast gołego php
-* Layout responsywny zamiast opartego na tabelach
+[is.mud.pl][1] - strona domowa klanu Infernal Seed działającego w świece MUDa Cygnus Division.
 
 Instalacja
 -----------
