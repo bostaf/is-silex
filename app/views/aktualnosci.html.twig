@@ -5,15 +5,22 @@
 {% block content %}
     {{ parent() }}
 
-    {% for key,item in news %}
-        <time class="title timeago" datetime="{{ item['date'] }}">{{ item['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
-        <div class="body">{{ item['contents']|raw }}</div>
-        <div class="author">[{{ item['author']|raw }}]</div>
-        <br><br>
-    {% endfor %}
+    {% if news|length > 0 %}
 
-    {% if page == 'main' %}
-    <div><a href="{{ path('aktualnosci', {'page': 'archiwum'}) }}">Archiwum</a></div>
+        {% for key,item in news %}
+            <time class="title timeago" datetime="{{ item['date'] }}">{{ item['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
+            <div class="body">{{ item['contents']|raw }}</div>
+            <div class="author">[{{ item['author']|raw }}]</div>
+            <br><br>
+        {% endfor %}
+
+        {% if page == 'main' %}
+        <div><a href="{{ path('aktualnosci', {'page': 'archiwum'}) }}">Archiwum</a></div>
+        {% endif %}
+    {% else %}
+
+        Brak aktualności.
+
     {% endif %}
 
 {% endblock %}
