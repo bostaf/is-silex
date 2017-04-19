@@ -234,42 +234,46 @@ class MainController implements ControllerProviderInterface {
 
     public function guestbook(Application $app, $page)
     {
-        $inscriptions = new Guestbook(
+        $guestBook = new Guestbook(
             $app['config']['data']['guestbook']['dir'],
             $app['config']['data']['guestbook']['file_regex'],
             $app['config']['guestbook']['posts_per_page']
         );
 
         return $app['twig']->render('ksiega-gosci.html.twig', array(
-            'inscriptions' => $inscriptions->getInscriptions($page),
+            'inscriptions' => $guestBook->getInscriptionsForPage($page),
             'page' => $page,
-            'pages' => $inscriptions->getNumberOfPages()
+            'pages' => $guestBook->getNumberOfPages()
         ));
     }
 
     public function guestbookAddPost(Application $app, Request $request, $page)
     {
-        $inscriptions = new Guestbook(
+        $guestBook = new Guestbook(
             $app['config']['data']['guestbook']['dir'],
             $app['config']['data']['guestbook']['file_regex'],
             $app['config']['guestbook']['posts_per_page']
         );
+        $allInscriptions = $guestBook->getInscriptions();
+        $inscriptions = $guestBook->getInscriptionsForPage();
 
-        $lastPostDateOffset = $inscriptions->getDatetimeOfLatestPost()->modify($app['config']['guestbook']['max_frequency']);
+        $lastPostDateOffset = null;
+        if (count($allInscriptions) > 0)
+            $lastPostDateOffset = $guestBook->getDatetimeOfLatestPost()->modify($app['config']['guestbook']['max_frequency']);
         if ($lastPostDateOffset > new \DateTime('now')) {
             return $app['twig']->render('ksiega-gosci.html.twig', array(
-                'inscriptions' => $inscriptions->getInscriptions($page),
+                'inscriptions' => $inscriptions,
                 'page' => $page,
-                'pages' => $inscriptions->getNumberOfPages(),
+                'pages' => $guestBook->getNumberOfPages(),
                 'time_wait' => $lastPostDateOffset->diff(new \DateTime('now'))->format('%i minut')
             ));
         }
 
-        if ( ! $inscriptions->addPost($request)) {
+        if ( ! $guestBook->addPost($request)) {
             return $app['twig']->render('ksiega-gosci.html.twig', array(
-                'inscriptions' => $inscriptions->getInscriptions($page),
+                'inscriptions' => $inscriptions,
                 'page' => $page,
-                'pages' => $inscriptions->getNumberOfPages(),
+                'pages' => $guestBook->getNumberOfPages(),
                 'errors' => true
             ));
         }
