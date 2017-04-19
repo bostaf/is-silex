@@ -42,12 +42,8 @@ class Guestbook
         $this->postsPerPage = $postsPerPage;
     }
 
-    /**
-     * @return array
-     */
-    public function getInscriptions() {
+    public function getInscriptions($page = 1) {
         $dir_handle = opendir($this->getDir());
-        $wpis = array();
 
         $inscriptions = array();
         while ($file = readdir($dir_handle)) {
@@ -84,15 +80,7 @@ class Guestbook
 
         krsort ($inscriptions);
 
-        return $inscriptions;
-    }
-
-    /**
-     * @param int $page
-     * @return array
-     */
-    public function getInscriptionsForPage($page = 1) {
-        return array_slice($this->getInscriptions(), ($page - 1) * $this->getPostsPerPage(), $this->getPostsPerPage());
+        return array_slice($inscriptions, ($page - 1) * $this->getPostsPerPage(), $this->getPostsPerPage());
     }
 
     /**

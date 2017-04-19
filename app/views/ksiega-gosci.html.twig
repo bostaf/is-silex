@@ -32,37 +32,29 @@
     <div id="guestbook-form-toggler" style="{% if errors is defined or time_wait is defined %}display: none;{% endif %}">
         <a href="#" id="guestbook-form-toggler-button">Dodaj wpis</a>
     </div>
-    {% if inscriptions|length > 0 %}
-        {% if pages > 1 %}
-            <ul class="pager">
-                {% set prev = max(global.request.get('page') - 1, 1) %}
-                {% set next = min(global.request.get('page') + 1, pages) %}
-                <li><a href="{{ path('ksiega-gosci', {'page': prev}) }}"><</a></li>
-                {% for i in 1..pages %}
-                    <li><a href="{{ path('ksiega-gosci', {'page': i}) }}">{% if global.request.get('page') == i %}<b>{% endif %}{{ i }}{% if global.request.get('page') == i %}</b>{% endif %}</a></li>
-                {% endfor %}
-                <li><a href="{{ path('ksiega-gosci', {'page': next}) }}">></a></li>
-            </ul>
-        {% endif %}
-        {% for inscription in inscriptions %}
-            <div class="guestbook-post">
-                <ul>
-                    <li><strong>{{ inscription['nick'] }}</strong> {{ inscription['email'] }} {{ inscription['url'] }}</li>
-                    <li><time class="title timeago" datetime="{{ inscription['date'] }}">{{ inscription['date']|localizeddate('full', 'short', 'pl')|capitalize }}</time></li>
-                </ul>
-                <p>{{ inscription['contents']|nl2br }}</p>
-            </div>
+    <ul class="pager">
+        {% set prev = max(global.request.get('page') - 1, 1) %}
+        {% set next = min(global.request.get('page') + 1, pages) %}
+        <li><a href="{{ path('ksiega-gosci', {'page': prev}) }}"><</a></li>
+        {% for i in 1..pages %}
+            <li><a href="{{ path('ksiega-gosci', {'page': i}) }}">{% if global.request.get('page') == i %}<b>{% endif %}{{ i }}{% if global.request.get('page') == i %}</b>{% endif %}</a></li>
         {% endfor %}
-        {% if pages > 1 %}
-            <ul class="pager">
-                <li><a href="{{ path('ksiega-gosci', {'page': prev}) }}"><</a></li>
-                {% for i in 1..pages %}
-                    <li><a href="{{ path('ksiega-gosci', {'page': i}) }}">{% if global.request.get('page') == i %}<b>{% endif %}{{ i }}{% if global.request.get('page') == i %}</b>{% endif %}</a></li>
-                {% endfor %}
-                <li><a href="{{ path('ksiega-gosci', {'page': next}) }}">></a></li>
+        <li><a href="{{ path('ksiega-gosci', {'page': next}) }}">></a></li>
+    </ul>
+    {% for inscription in inscriptions %}
+        <div class="guestbook-post">
+            <ul>
+                <li><strong>{{ inscription['nick'] }}</strong> {{ inscription['email'] }} {{ inscription['url'] }}</li>
+                <li><time class="title timeago" datetime="{{ inscription['date'] }}">{{ inscription['date']|localizeddate('full', 'short', 'pl')|capitalize }}</time></li>
             </ul>
-        {% endif %}
-    {% else %}
-        Brak wpisów.
-    {% endif %}
+            <p>{{ inscription['contents']|nl2br }}</p>
+        </div>
+    {% endfor %}
+    <ul class="pager">
+        <li><a href="{{ path('ksiega-gosci', {'page': prev}) }}"><</a></li>
+        {% for i in 1..pages %}
+            <li><a href="{{ path('ksiega-gosci', {'page': i}) }}">{% if global.request.get('page') == i %}<b>{% endif %}{{ i }}{% if global.request.get('page') == i %}</b>{% endif %}</a></li>
+        {% endfor %}
+        <li><a href="{{ path('ksiega-gosci', {'page': next}) }}">></a></li>
+    </ul>
 {% endblock %}
