@@ -1,30 +1,45 @@
-window.onload = function() {
+$(document).ready(function() {
+    $("time.timeago").timeago();
+    $.timeago.settings.cutoff = 1000*60*60*24*365;
 
-    var menu = document.getElementById("main_menu");
-    var menuButton = document.getElementById("menu_button");
 
-    menuButton.onclick = function() {
-        if (menu.style.display == "none" || menu.style.display == "") {
-            menu.style.display = "block";
+    var menu = $("#main_menu");
+    var menuButton = $("#menu_button");
+
+    menuButton.click(function() {
+        if (menu.not(":visible")) {
+            menu.show();
         } else {
-            menu.style.display = "none";
+            menu.hide();
         }
-    };
+    });
 
-    var membersDiffButton = document.getElementById("get-members-diff-button");
-    var membersDiffSelectFirstLog = document.getElementById("get-members-diff-select-first-log");
-    var membersDiffSelectSecondLog = document.getElementById("get-members-diff-select-second-log");
+    var membersDiffButton = $("#get-members-diff-button");
+    var membersDiffSelectFirstLog = $("#get-members-diff-select-first-log");
+    var membersDiffSelectSecondLog = $("#get-members-diff-select-second-log");
 
-    function getSelectValue(e) {
-        return e.options[e.selectedIndex].value;
-    }
+    membersDiffSelectFirstLog.change(function() {
+        var url = membersDiffButton.attr("main_url");
+        membersDiffButton.attr("onclick", "window.location.href = '" + url + "/" + membersDiffSelectFirstLog.val() + "/" + membersDiffSelectSecondLog.val() + "';");
+    });
+    membersDiffSelectSecondLog.change(function() {
+        var url = membersDiffButton.attr("main_url");
+        membersDiffButton.attr("onclick", "window.location.href = '" + url + "/" + membersDiffSelectFirstLog.val() + "/" + membersDiffSelectSecondLog.val() + "';");
+    });
 
-    membersDiffSelectFirstLog.onchange = function() {
-        var url = membersDiffButton.getAttribute("main_url");
-        membersDiffButton.setAttribute("onclick", "window.location.href = '" + url + "/" + getSelectValue(membersDiffSelectFirstLog) + "/" + getSelectValue(membersDiffSelectSecondLog) + "';");
-    };
-    membersDiffSelectSecondLog.onchange = function() {
-        var url = membersDiffButton.getAttribute("main_url");
-        membersDiffButton.setAttribute("onclick", "window.location.href = '" + url + "/" + getSelectValue(membersDiffSelectFirstLog) + "/" + getSelectValue(membersDiffSelectSecondLog) + "';");
-    };
-};
+    var guestbookButton = $("#guestbook-form-toggler-button");
+    var guestbookButtonContainer = $("#guestbook-form-toggler");
+    var guestbookContainer = $("#guestbook-form-container");
+    var guestbookReset = $("#guestbook-form-button-reset");
+    guestbookButton.click(function() {
+        if (guestbookContainer.not(":visible")) {
+            guestbookContainer.show();
+            guestbookButtonContainer.hide();
+        }
+        return false;
+    });
+    guestbookReset.click(function() {
+        guestbookContainer.hide();
+        guestbookButtonContainer.show();
+    });
+});

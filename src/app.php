@@ -14,6 +14,7 @@ use Symfony\Component\Debug\ErrorHandler;
 $app->register(new Rpodwika\Silex\YamlConfigServiceProvider(__DIR__.'/../app/config/config.yml'));
 $app->register(new Rpodwika\Silex\YamlConfigServiceProvider(__DIR__.'/../app/config/members.yml'));
 $app['debug'] = $app['config']['app']['debug'];
+$app['env'] = $app['config']['app']['env'];
 
 //register an error handler
 // todo implement error handling for different error/exception categories (currently there's one common)
@@ -42,12 +43,12 @@ $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 
 // Asset service provider
 $app->register(new Silex\Provider\AssetServiceProvider(), array(
-    'assets.version' => 'v1',
+    'assets.version' => 'v3',
     'assets.version_format' => '%s?version=%s',
     'assets.named_packages' => array(
-        'css' => array('version' => 'css3', 'base_path' => '/css'),
-        'js' => array('base_path' => '/js'),
-        'img' => array('base_path' => '/img'),
+        'css' => array('base_path' => '/css', 'version' => 'v1'),
+        'js' => array('base_path' => '/js', 'version' => 'v1'),
+        'img' => array('base_path' => '/img', 'version' => 'v1'),
     ),
 ));
 

@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% set page_title = 'Cygnus Division' %}
+
+{% block content %}
+    {{ parent() }}
+
+    Cygnus Division to jeden z niewielu ocalałych MUDów - gier tekstowych osadzonych w świecie fantasy;
+    przodków współczesnych gier MMORPG.
+    <br /><br />
+    Żeby zagrać w Cygnus Division:
+    <ul>
+        <li>
+            Pod Linuksem:
+            <ul>
+                <li>
+                    w linii poleceń wpisz: <span class="inline-code">telnet mud.cygnusdivision.pl 4444</span>
+                </li>
+            </ul>
+        </li>
+        <li>
+            Pod Windowsem:
+            <ul>
+                <li>
+                    pobierz i uruchom klienta TELNET i SSH: <a href="https://the.earth.li/~sgtatham/putty/latest/x86/putty.exe">Putty</a> (519 kB)
+                </li>
+                <li>w pole "Host Name" wpisz: <span class="inline-code">mud.cygnusdivision.pl</span></li>
+                <li>w pole "Port" wpisz: <span class="inline-code">4444</span></li>
+                <li>z opcji "Connection type" wybierz: <span class="inline-code">Telnet</span></li>
+                <li>wciśnij Enter lub kliknij przycisk "Open"</li>
+            </ul>
+        </li>
+    </ul>
+    <br />
+    Oficjalna strona MUDa Cygnus division znajduje się pod adresem <a href="http://www.cygnusdivision.pl">www.cygnusdivision.pl</a>.
+{% endblock %}
