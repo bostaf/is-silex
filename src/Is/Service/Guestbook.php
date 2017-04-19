@@ -7,10 +7,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Is\Service;
 use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Class Guestbook
  * @package Is\Service
@@ -21,17 +19,14 @@ class Guestbook
      * @var string
      */
     private $dir;
-
     /**
      * @var string
      */
     private $fileRegex;
-
     /**
      * @var int
      */
     private  $postsPerPage;
-
     /**
      * @param string $dir New directory
      * @param string $fileRegex Regex for file name mask
@@ -41,10 +36,12 @@ class Guestbook
         $this->fileRegex = $fileRegex;
         $this->postsPerPage = $postsPerPage;
     }
-
-    public function getInscriptions($page = 1) {
+    /**
+     * @return array
+     */
+    public function getInscriptions() {
         $dir_handle = opendir($this->getDir());
-
+        $wpis = array();
         $inscriptions = array();
         while ($file = readdir($dir_handle)) {
             if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
@@ -77,12 +74,16 @@ class Guestbook
             }
         }
         closedir($dir_handle);
-
         krsort ($inscriptions);
-
-        return array_slice($inscriptions, ($page - 1) * $this->getPostsPerPage(), $this->getPostsPerPage());
+        return $inscriptions;
     }
-
+    /**
+     * @param int $page
+     * @return array
+     */
+    public function getInscriptionsForPage($page = 1) {
+        return array_slice($this->getInscriptions(), ($page - 1) * $this->getPostsPerPage(), $this->getPostsPerPage());
+    }
     /**
      * @return int
      */
@@ -93,7 +94,6 @@ class Guestbook
         while ($file = readdir($dir_handle)) if (preg_match($this->getFileRegex(), $file)) $i++;
         return (int) ceil($i / $this->getPostsPerPage());
     }
-
     /**
      * @param Request $request
      * @return bool
@@ -103,9 +103,7 @@ class Guestbook
         $date = new \DateTime('now');
         $nick = trim($request->request->get('guestbook-nick'));
         $wpis = trim($request->request->get('guestbook-wpis'));
-
         if ($nick == '' or $wpis == '') return false;
-
         $data[] = 'Nick:' . substr($nick, 0, 25) . PHP_EOL;
         $data[] = 'Dodano:' . $date->format('Y-m-d (H:i:s)') . PHP_EOL;
         $data[] = 'Url:' . substr(trim($request->request->get('guestbook-url')), 0, 25) . PHP_EOL;
@@ -114,7 +112,6 @@ class Guestbook
         file_put_contents($this->getDir() . 'guestbook-' . $date->format('Y-m-d-H-i-s') . '.txt', $data);
         return true;
     }
-
     /**
      * @return \DateTime|null
      */
@@ -122,7 +119,6 @@ class Guestbook
     {
         $dir_handle = opendir($this->getDir());
         $datetime = null;
-
         while ($file = readdir($dir_handle)) {
             if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
                 $newsDate = new \DateTime($fileNameArray[1].' '.$fileNameArray[2].':'.$fileNameArray[3].':'.$fileNameArray[4]);
@@ -133,24 +129,20 @@ class Guestbook
                 }
             }
         }
-
         return $datetime;
     }
-
     /**
      * @return string
      */
     public function getDir() {
         return $this->dir;
     }
-
     /**
      * @return string
      */
     public function getFileRegex() {
         return $this->fileRegex;
     }
-
     /**
      * @return int
      */

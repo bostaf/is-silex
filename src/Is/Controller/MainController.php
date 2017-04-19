@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 namespace Is\Controller;
-
 use Is\Service\Guestbook;
 use Is\Service\LogsChats;
 use Is\Service\Members;
@@ -17,20 +16,17 @@ use Is\Service\WhoIs;
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
-
 /**
  * Class MainController
  * @package Is\Controller
  */
 class MainController implements ControllerProviderInterface {
-
     /**
      * @param Application $app
      * @return mixed controllers_factory
      */
     public function connect(Application $app) {
         $factory = $app['controllers_factory'];
-
         $factory->get('/', function () use ($app) {
             return $app['twig']->render('powitanie.html.twig', array());
         })->bind('powitanie');
@@ -71,14 +67,11 @@ class MainController implements ControllerProviderInterface {
         })->bind('cygnus-division');
         $factory->get('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbook')->value('page', 1)->bind('ksiega-gosci');
         $factory->post('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbookAddPost')->value('page', 1);
-
         if ($app['config']['app']['require_https']) {
             $factory->requireHttps();
         }
-
         return $factory;
     }
-
     /**
      * @param Application $app
      * @param string $page
@@ -87,13 +80,11 @@ class MainController implements ControllerProviderInterface {
     public function aktualnosci(Application $app, $page)
     {
         $news = new News($app['config']['data']['news']['dir'], $app['config']['data']['news']['file_regex']);
-
         return $app['twig']->render('aktualnosci.html.twig', array(
             'news' => $news->getNews($page),
             'page' => $page
         ));
     }
-
     public function historia(Application $app)
     {
         // check if there are any bios
@@ -102,12 +93,10 @@ class MainController implements ControllerProviderInterface {
             $app['config']['data']['bios']['file_regex'],
             ''
         );
-
         return $app['twig']->render('historia.html.twig', array(
             'count_bios' => count($bios->getMembersWithBios())
         ));
     }
-
     /**
      * @param Application $app
      * @param Request $request
@@ -123,21 +112,17 @@ class MainController implements ControllerProviderInterface {
             $app['config']['data']['bios']['file_regex'],
             ''
         );
-
         $logsFromUrl['first'] = $request->attributes->get('firstLog');
         $logsFromUrl['second'] = $request->attributes->get('secondLog');
-
         $members = new Members(
             $app['config']['data']['members']['dir'],
             $app['config']['data']['members']['file_regex'],
             $app['config']['data']['members']['line_regex']
         );
-
         if ($firstLog != '' and $secondLog != '') {
             $firstLog = 'mem-' . $firstLog . '.txt';
             $secondLog = 'mem-' . $secondLog . '.txt';
         }
-
         return $app['twig']->render('misiaki.html.twig', array(
             'misiaki' => $members->getMembers($firstLog, $secondLog),
             'config' => $app['config']['members'],
@@ -146,7 +131,6 @@ class MainController implements ControllerProviderInterface {
             'count_bios' => count($bios->getMembersWithBios())
         ));
     }
-
     /**
      * @param Application $app
      * @return mixed
@@ -158,13 +142,11 @@ class MainController implements ControllerProviderInterface {
             $app['config']['data']['bios']['file_regex'],
             ''
         );
-
         return $app['twig']->render('bios_menu.html.twig', array(
             'bios' => $bios->getMembersWithBios(),
             'config' => $app['config']['members']
         ));
     }
-
     /**
      * @param Application $app
      * @param string $misiak
@@ -177,12 +159,10 @@ class MainController implements ControllerProviderInterface {
             $app['config']['data']['bios']['file_regex'],
             ''
         );
-
         return $app['twig']->render('misiak.html.twig', array(
             'misiak' => $bios->getMemberData($misiak)
         ));
     }
-
     /**
      * @param Application $app
      * @return mixed
@@ -193,12 +173,10 @@ class MainController implements ControllerProviderInterface {
             $app['config']['data']['logs-chats']['dir'],
             $app['config']['data']['logs-chats']['file_regex']
         );
-
         return $app['twig']->render('rozmowy.html.twig', array(
             'chats' => $chats->getLogs()
         ));
     }
-
     /**
      * @param Application $app
      * @param string $id
@@ -210,12 +188,10 @@ class MainController implements ControllerProviderInterface {
             $app['config']['data']['logs-chats']['dir'],
             $app['config']['data']['logs-chats']['file_regex']
         );
-
         return $app['twig']->render('rozmowa.html.twig', array(
             'rozmowa' => $chats->getChat($id)
         ));
     }
-
     /**
      * @param Application $app
      * @return mixed
@@ -226,54 +202,51 @@ class MainController implements ControllerProviderInterface {
             $app['config']['data']['logs-who-is']['dir'],
             $app['config']['data']['logs-who-is']['file_regex']
         );
-
         return $app['twig']->render('logi-who-is.html.twig', array(
             'logs' => $logs->getLogs()
         ));
     }
-
     public function guestbook(Application $app, $page)
     {
-        $inscriptions = new Guestbook(
+        $guestBook = new Guestbook(
             $app['config']['data']['guestbook']['dir'],
             $app['config']['data']['guestbook']['file_regex'],
             $app['config']['guestbook']['posts_per_page']
         );
-
         return $app['twig']->render('ksiega-gosci.html.twig', array(
-            'inscriptions' => $inscriptions->getInscriptions($page),
+            'inscriptions' => $guestBook->getInscriptionsForPage($page),
             'page' => $page,
-            'pages' => $inscriptions->getNumberOfPages()
+            'pages' => $guestBook->getNumberOfPages()
         ));
     }
-
     public function guestbookAddPost(Application $app, Request $request, $page)
     {
-        $inscriptions = new Guestbook(
+        $guestBook = new Guestbook(
             $app['config']['data']['guestbook']['dir'],
             $app['config']['data']['guestbook']['file_regex'],
             $app['config']['guestbook']['posts_per_page']
         );
-
-        $lastPostDateOffset = $inscriptions->getDatetimeOfLatestPost()->modify($app['config']['guestbook']['max_frequency']);
+        $allInscriptions = $guestBook->getInscriptions();
+        $inscriptions = $guestBook->getInscriptionsForPage();
+        $lastPostDateOffset = null;
+        if (count($allInscriptions) > 0)
+            $lastPostDateOffset = $guestBook->getDatetimeOfLatestPost()->modify($app['config']['guestbook']['max_frequency']);
         if ($lastPostDateOffset > new \DateTime('now')) {
             return $app['twig']->render('ksiega-gosci.html.twig', array(
-                'inscriptions' => $inscriptions->getInscriptions($page),
+                'inscriptions' => $inscriptions,
                 'page' => $page,
-                'pages' => $inscriptions->getNumberOfPages(),
+                'pages' => $guestBook->getNumberOfPages(),
                 'time_wait' => $lastPostDateOffset->diff(new \DateTime('now'))->format('%i minut')
             ));
         }
-
-        if ( ! $inscriptions->addPost($request)) {
+        if ( ! $guestBook->addPost($request)) {
             return $app['twig']->render('ksiega-gosci.html.twig', array(
-                'inscriptions' => $inscriptions->getInscriptions($page),
+                'inscriptions' => $inscriptions,
                 'page' => $page,
-                'pages' => $inscriptions->getNumberOfPages(),
+                'pages' => $guestBook->getNumberOfPages(),
                 'errors' => true
             ));
         }
-
         return $app->redirect($app->path('ksiega-gosci'));
     }
 }
