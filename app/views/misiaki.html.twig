@@ -8,74 +8,78 @@
     {% endif %}
     {{ parent() }}
 
-    {% for clevel, member_data in misiaki['members'] %}
-        <div class="members_clevel_section">
-            <div><strong>{{ config['clevels'][clevel] }}</strong></div>
-            {% for nick,stats in member_data %}
-                <div class="members_member">
-                    <span class="
-                        {% if stats['clan_presence'] > 0 %}member_new
-                        {% else %}
-                            {% if stats['clevel_status'] > 0 %}member_promotion
-                            {% elseif stats['clevel_status'] < 0%}member_degradation
+    {% if misiaki|length > 0 %}
+        {% for clevel, member_data in misiaki['members'] %}
+            <div class="members_clevel_section">
+                <div><strong>{{ config['clevels'][clevel] }}</strong></div>
+                {% for nick,stats in member_data %}
+                    <div class="members_member">
+                        <span class="
+                            {% if stats['clan_presence'] > 0 %}member_new
+                            {% else %}
+                                {% if stats['clevel_status'] > 0 %}member_promotion
+                                {% elseif stats['clevel_status'] < 0%}member_degradation
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                        ">
-                        [{{ clevel }}]
-                    </span>
-                    <span class="
-                        {% if stats['clan_presence'] > 0 %}member_new
-                        {% else %}
-                            {% if stats['level_status'] > 0 %}member_promotion
-                            {% elseif stats['level_status'] < 0%}member_degradation
+                            ">
+                            [{{ clevel }}]
+                        </span>
+                        <span class="
+                            {% if stats['clan_presence'] > 0 %}member_new
+                            {% else %}
+                                {% if stats['level_status'] > 0 %}member_promotion
+                                {% elseif stats['level_status'] < 0%}member_degradation
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                        ">
-                        [{{ stats['level'] }}]
-                    </span>
-                    <span>{% if config['titles'][nick] is defined %}{{ config['titles'][nick] }} {% endif %}{{ nick }}</span>
-                    <span>
-                        {% if nick in config['females'] %}
-                            {{ config['professions_female'][stats['profession']] }}
-                        {% else %}
-                            {{ config['professions_male'][stats['profession']] }}
-                        {% endif %}
-                    </span>
-                </div>
-            {% endfor %}
-        </div>
-    {% endfor %}
+                            ">
+                            [{{ stats['level'] }}]
+                        </span>
+                        <span>{% if config['titles'][nick] is defined %}{{ config['titles'][nick] }} {% endif %}{{ nick }}</span>
+                        <span>
+                            {% if nick in config['females'] %}
+                                {{ config['professions_female'][stats['profession']] }}
+                            {% else %}
+                                {{ config['professions_male'][stats['profession']] }}
+                            {% endif %}
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
 
-    {% if misiaki['outcasts']|length > 0 %}
-        Ostatnie outcasty: {{ misiaki['outcasts']|join(', ') }}.
-    <br />
-    <br />
+        {% if misiaki['outcasts']|length > 0 %}
+            Ostatnie outcasty: {{ misiaki['outcasts']|join(', ') }}.
+        <br />
+        <br />
+        {% endif %}
+        <hr>
+        Znaczenie kolorów na liście mISiaków:<br />
+        <span class="member_promotion">[awans]</span>, <span class="member_degradation">[degradacja]</span>, <span class="member_new">[nowy klanowicz]</span>
+        <br /><br />
+        Lista ostatnio uaktualniona <time class="title timeago" datetime="{{ misiaki['date'] }}">w {{ misiaki['date']|localizeddate('full', 'none', 'pl') }}</time>.
+        <br /><br /><hr />
+        <br />
+        Porównaj
+        <select name="get-members-diff-select-first-log" id="get-members-diff-select-first-log">
+            {% for file in files_list %}
+                <option
+                        value="{{ file['file_name_date_Ymd'] }}"
+                        {% if file['file_name_date_Ymd'] == logs_from_url['first'] %}selected="selected"{% endif %}
+                        >{{ file['file_date']|localizeddate('long', 'none', 'pl') }}</option>
+            {% endfor %}
+        </select>
+        z
+        <select name="get-members-diff-select-second-log" id="get-members-diff-select-second-log">
+            {% for file in files_list %}
+                <option
+                        value="{{ file['file_name_date_Ymd'] }}"
+                        {% if file['file_name_date_Ymd'] == logs_from_url['second'] %}selected="selected"{% endif %}
+                        >{{ file['file_date']|localizeddate('long', 'none', 'pl') }}</option>
+            {% endfor %}
+        </select>
+        <button id="get-members-diff-button" onclick="window.location.href = '{{ path('misiaki') }}';" main_url="{{ path('misiaki') }}">Go!</button>
+        <br /><br />
+    {% else %}
+        Brak danych.
     {% endif %}
-    <hr>
-    Znaczenie kolorów na liście mISiaków:<br />
-    <span class="member_promotion">[awans]</span>, <span class="member_degradation">[degradacja]</span>, <span class="member_new">[nowy klanowicz]</span>
-    <br /><br />
-    Lista ostatnio uaktualniona <time class="title timeago" datetime="{{ misiaki['date'] }}">w {{ misiaki['date']|localizeddate('full', 'none', 'pl') }}</time>.
-    <br /><br /><hr />
-    <br />
-    Porównaj
-    <select name="get-members-diff-select-first-log" id="get-members-diff-select-first-log">
-        {% for file in files_list %}
-            <option
-                    value="{{ file['file_name_date_Ymd'] }}"
-                    {% if file['file_name_date_Ymd'] == logs_from_url['first'] %}selected="selected"{% endif %}
-                    >{{ file['file_date']|localizeddate('long', 'none', 'pl') }}</option>
-        {% endfor %}
-    </select>
-    z
-    <select name="get-members-diff-select-second-log" id="get-members-diff-select-second-log">
-        {% for file in files_list %}
-            <option
-                    value="{{ file['file_name_date_Ymd'] }}"
-                    {% if file['file_name_date_Ymd'] == logs_from_url['second'] %}selected="selected"{% endif %}
-                    >{{ file['file_date']|localizeddate('long', 'none', 'pl') }}</option>
-        {% endfor %}
-    </select>
-    <button id="get-members-diff-button" onclick="window.location.href = '{{ path('misiaki') }}';" main_url="{{ path('misiaki') }}">Go!</button>
-    <br /><br />
 {% endblock %}

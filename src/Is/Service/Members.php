@@ -66,6 +66,8 @@ class Members
             }
             closedir($dir_handle);
 
+            if (count($files) == 0) return [];
+
             krsort($files);
 
             $first = array_slice($files, 0, 1);
