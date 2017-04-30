@@ -5,17 +5,21 @@
 {% block content %}
     {{ parent() }}
 
-    Daty są datami zamieszczenia logów na stronie a nie datami logowania.
-    <br />
-    <br />
-    {% for dateLogs in chats %}
-        <time class="title timeago" datetime="{{ dateLogs['date'] }}" id="{{ dateLogs['date']|date('Y-m-d') }}">{{ dateLogs['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
-        <a href="#{{ dateLogs['date']|date('Y-m-d') }}" class="permalink">¶</a>
+    {% if chats|length > 0 %}
+        Daty są datami zamieszczenia logów na stronie a nie datami logowania.
         <br />
-        <ul>
-            {% for filename,title in dateLogs['logs'] %}
-                <li><a href="{{ path('rozmowa', {'id': filename}) }}">{{ title }}</a></li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
+        <br />
+        {% for dateLogs in chats %}
+            <time class="title timeago" datetime="{{ dateLogs['date'] }}" id="{{ dateLogs['date']|date('Y-m-d') }}">{{ dateLogs['date']|localizeddate('full', 'none', 'pl')|capitalize }}</time>
+            <a href="#{{ dateLogs['date']|date('Y-m-d') }}" class="permalink">¶</a>
+            <br />
+            <ul>
+                {% for filename,title in dateLogs['logs'] %}
+                    <li><a href="{{ path('rozmowa', {'id': filename}) }}">{{ title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    {% else %}
+        Brak logów.
+    {% endif %}
 {% endblock %}
