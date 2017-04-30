@@ -5,11 +5,15 @@
 {% block content %}
     {{ parent() }}
 
-    {% for log in logs %}
-        <time class="title timeago" datetime="{{ log['date'] }}" id="{{ log['date']|date('Y-m-d') }}">{{ log['date']|localizeddate('full', 'short', 'pl')|capitalize }}</time>
-        <a href="#{{ log['date']|date('Y-m-d') }}" class="permalink">¶</a>
-        <br /><br />
-        {{ log['contents']|raw }}
-        <br />
-    {% endfor %}
+    {% if logs|length > 0 %}
+        {% for log in logs %}
+            <time class="title timeago" datetime="{{ log['date'] }}" id="{{ log['date']|date('Y-m-d') }}">{{ log['date']|localizeddate('full', 'short', 'pl')|capitalize }}</time>
+            <a href="#{{ log['date']|date('Y-m-d') }}" class="permalink">¶</a>
+            <br /><br />
+            {{ log['contents']|raw }}
+            <br />
+        {% endfor %}
+    {% else %}
+        Brak logów.
+    {% endif %}
 {% endblock %}
