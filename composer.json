@@ -23,5 +23,8 @@
         "psr-4": {
             "Is\\": "src/Is"
         }
+    },
+    "require-dev": {
+        "silex/web-profiler": "^2.0"
     }
 }
