@@ -11,6 +11,8 @@
 use Symfony\Component\Debug\ErrorHandler;
 use Silex\Provider;
 
+// Session
+$app->register(new Silex\Provider\SessionServiceProvider());
 
 // Service provider
 $app->register(new Rpodwika\Silex\YamlConfigServiceProvider(__DIR__.'/../app/config/config.yml'));
@@ -57,6 +59,29 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
 // Controller
 $app->mount('/', new Is\Controller\MainController());
 
+// Security
+$securityFirewalls = array(
+    'main' => array(
+        'pattern' => '^/',
+        'anonymous' => true,
+        'form' => array('login_path' => '/login', 'check_path' => '/login_check'),
+        'logout' => array('logout_path' => '/logout', 'invalidate_session' => true),
+        'users' => array(
+            'admin' => array('ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
+            'mod' => array('ROLE_MOD', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
+            'user' => array('ROLE_USER', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
+        ),
+    )
+);
+$securityRoleHierarchy = array(
+    'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH', 'ROLE_MOD'),
+    'ROLE_MOD' => array('ROLE_USER'),
+);
+$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+    'security.firewalls' => $securityFirewalls,
+    'security.role_hierarchy' => $securityRoleHierarchy
+));
+
 // Profiler
 if ($app['debug']) {
     $app->register(new Silex\Provider\ServiceControllerServiceProvider());
@@ -65,4 +90,4 @@ if ($app['debug']) {
         'profiler.mount_prefix' => '/_profiler', // this is the default
     ));
 }
-
+$app->boot();

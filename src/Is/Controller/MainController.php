@@ -70,6 +70,14 @@ class MainController implements ControllerProviderInterface {
         if ($app['config']['app']['require_https']) {
             $factory->requireHttps();
         }
+
+        $factory->get('/login', function(Request $request) use ($app) {
+            return $app['twig']->render('login.html.twig', array(
+                'error'         => $app['security.last_error']($request),
+                'last_username' => $app['session']->get('_security.last_username'),
+            ));
+        })->bind('login');
+
         return $factory;
     }
     /**

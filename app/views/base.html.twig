@@ -49,6 +49,15 @@
         <a href="{{ path('powitanie') }}">Powitanie</a><br>
         <a href="{{ path('aktualnosci') }}">Aktualności</a><br>
         <a href="{{ path('ksiega-gosci') }}">Księga Gości</a><br>
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <span style="color: red;">
+                *{{ app.user.username }}*
+                {% if is_granted('ROLE_ADMIN') %}qq{% endif %}
+                (<a href="{{ path('logout') }}">wyloguj</a>)
+            </span><br>
+        {% endif %}
+
         <br>
         <b>»&nbsp;O klanie</b><br>
         <a href="{{ path('misiaki') }}">mISiaki</a><br>
