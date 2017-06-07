@@ -66,11 +66,9 @@ $securityFirewalls = array(
         'anonymous' => true,
         'form' => array('login_path' => '/login', 'check_path' => '/login_check'),
         'logout' => array('logout_path' => '/logout', 'invalidate_session' => true),
-        'users' => array(
-            'admin' => array('ROLE_ADMIN', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
-            'mod' => array('ROLE_MOD', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
-            'user' => array('ROLE_USER', '$2y$10$3i9/lVd8UOFIJ6PAMFt8gu3/r5g0qeCJvoSlLCsvMTythye19F77a'),
-        ),
+        'users' => function() use ($app) {
+            return new \Is\Security\User\UserProvider($app['config']['data']['users']['file']);
+        }
     )
 );
 $securityRoleHierarchy = array(
@@ -79,7 +77,13 @@ $securityRoleHierarchy = array(
 );
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => $securityFirewalls,
-    'security.role_hierarchy' => $securityRoleHierarchy
+    'security.role_hierarchy' => $securityRoleHierarchy,
+    'security.default_encoder' => function($app) {
+        return new Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder(10);
+    },
+    'security.access_rules' => array(
+        array('^/user/password', 'ROLE_USER')
+    )
 ));
 
 // Profiler

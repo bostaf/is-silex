@@ -8,6 +8,7 @@
  * file that was distributed with this source code.
  */
 namespace Is\Controller;
+use Is\Security\User\User;
 use Is\Service\Guestbook;
 use Is\Service\LogsChats;
 use Is\Service\Members;
@@ -16,6 +17,8 @@ use Is\Service\WhoIs;
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
+
 /**
  * Class MainController
  * @package Is\Controller
@@ -67,16 +70,21 @@ class MainController implements ControllerProviderInterface {
         })->bind('cygnus-division');
         $factory->get('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbook')->value('page', 1)->bind('ksiega-gosci');
         $factory->post('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbookAddPost')->value('page', 1);
-        if ($app['config']['app']['require_https']) {
-            $factory->requireHttps();
-        }
+
 
         $factory->get('/login', function(Request $request) use ($app) {
-            return $app['twig']->render('login.html.twig', array(
+            return $app['twig']->render('user/login.html.twig', array(
                 'error'         => $app['security.last_error']($request),
                 'last_username' => $app['session']->get('_security.last_username'),
             ));
         })->bind('login');
+        $factory->get('/user/password', 'Is\Controller\MainController::userPassword')->bind('user-password');
+        $factory->post('/user/password', 'Is\Controller\MainController::userPasswordSubmit');
+
+
+        if ($app['config']['app']['require_https']) {
+            $factory->requireHttps();
+        }
 
         return $factory;
     }
@@ -256,5 +264,31 @@ class MainController implements ControllerProviderInterface {
             ));
         }
         return $app->redirect($app->path('ksiega-gosci'));
+    }
+
+    public function userPassword(Application $app)
+    {
+        return $app['twig']->render('user/password.html.twig', array(
+            'error' => true
+        ));
+    }
+    public function userPasswordSubmit(Application $app, Request $request)
+    {
+        $user = $app['security.token_storage']->getToken()->getUser();
+        $encoder = $app['security.encoder_factory']->getEncoder($user);
+
+        // todo remove - temp for check
+        $postPass = trim($request->request->get('current_password'));
+        //$encodedPostPass = $encoder->encodePassword($postPass, $user->getSalt());
+        $passwordIsValid = $encoder->isPasswordValid($user->getPassword(), $postPass, $user->getSalt());
+
+        // todo implement check for anon. user
+
+        return $app['twig']->render('user/password.html.twig', array(
+            'error' => true,
+            'postPass' => $postPass,
+            'encodedPostPass' => $encodedPostPass,
+            'passwordIsValid' => $passwordIsValid
+        ));
     }
 }
