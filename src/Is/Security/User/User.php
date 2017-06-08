@@ -93,6 +93,14 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * @param string $password Encoded password string
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    /**
      * Returns the salt that was originally used to encode the password.
      *
      * This can return null if the password was not encoded using a salt.
@@ -122,6 +130,6 @@ class User implements UserInterface, EquatableInterface
      */
     public function eraseCredentials()
     {
-        $this->password = null;
+        //$this->password = null;
     }
 }

@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 namespace Is\Controller;
-use Is\Security\User\User;
+
 use Is\Service\Guestbook;
 use Is\Service\LogsChats;
 use Is\Service\Members;
@@ -17,7 +17,6 @@ use Is\Service\WhoIs;
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 
 /**
  * Class MainController
@@ -269,7 +268,7 @@ class MainController implements ControllerProviderInterface {
     public function userPassword(Application $app)
     {
         return $app['twig']->render('user/password.html.twig', array(
-            'error' => true
+            'error' => false
         ));
     }
     public function userPasswordSubmit(Application $app, Request $request)
@@ -277,18 +276,24 @@ class MainController implements ControllerProviderInterface {
         $user = $app['security.token_storage']->getToken()->getUser();
         $encoder = $app['security.encoder_factory']->getEncoder($user);
 
-        // todo remove - temp for check
-        $postPass = trim($request->request->get('current_password'));
-        //$encodedPostPass = $encoder->encodePassword($postPass, $user->getSalt());
-        $passwordIsValid = $encoder->isPasswordValid($user->getPassword(), $postPass, $user->getSalt());
+        $postCurrentPass = trim($request->request->get('current_password'));
+        $postNewPass = trim($request->request->get('new_password'));
+        $postRepeatNewPass = trim($request->request->get('repeat_new_password'));
 
-        // todo implement check for anon. user
+        $currentPasswordIsValid = $encoder->isPasswordValid($user->getPassword(), $postCurrentPass, $user->getSalt());
+        $newPasswordIsValid = $postNewPass == $postRepeatNewPass;
 
-        return $app['twig']->render('user/password.html.twig', array(
-            'error' => true,
-            'postPass' => $postPass,
-            'encodedPostPass' => $encodedPostPass,
-            'passwordIsValid' => $passwordIsValid
-        ));
+        if (!($currentPasswordIsValid && $newPasswordIsValid)) {
+            return $app['twig']->render('user/password.html.twig', array(
+                'error' => true,
+            ));
+        }
+        // persist new password
+        $user->setPassword($encoder->encodePassword($postNewPass, $user->getSalt()));
+        // todo flush user
+            var_dump('<pre>', $app);
+        die();
+        // redirect somewhere
+        return $app->redirect($app->path('powitanie'));
     }
 }
