@@ -46,24 +46,38 @@
 <div class="naglowek">&nbsp;</div>
 <div class="group">
     <div class="menu" id="main_menu">
-        <a href="{{ path('powitanie') }}">Powitanie</a><br>
-        <a href="{{ path('aktualnosci') }}">Aktualności</a><br>
-        <a href="{{ path('ksiega-gosci') }}">Księga Gości</a><br>
-        <br>
-        <b>»&nbsp;O klanie</b><br>
-        <a href="{{ path('misiaki') }}">mISiaki</a><br>
-        <a href="{{ path('historia') }}">Historia</a><br>
-        <a href="{{ path('opis-klanu') }}">Opis Klanu</a><br>
-        <a href="{{ path('kodeks') }}">Kodeks</a><br>
-        <a href="{{ path('umiejetnosci') }}">Umiejętności</a><br>
-        <a href="{{ path('totemy') }}">Totemy</a><br>
-        <a href="{{ path('logi') }}">Logi</a><br>
-        <br>
-        <b>»&nbsp;Inne</b><br>
-        <a href="http://galeria.mud.pl/index.php?/category/885" target="_parent">Galeria</a><br>
-        <a href="{{ path('linki') }}">Linki</a><br>
-        <a href="{{ path('o-stronie') }}">O stronie</a><br>
-        <a href="../src/index.html">Stare WWW</a><br>
+        <a href="{{ path('powitanie') }}">Powitanie</a><br />
+        <a href="{{ path('aktualnosci') }}">Aktualności</a><br />
+        <a href="{{ path('ksiega-gosci') }}">Księga Gości</a><br />
+        <br />
+        <b>»&nbsp;O klanie</b><br />
+        <a href="{{ path('misiaki') }}">mISiaki</a><br />
+        <a href="{{ path('historia') }}">Historia</a><br />
+        <a href="{{ path('opis-klanu') }}">Opis Klanu</a><br />
+        <a href="{{ path('kodeks') }}">Kodeks</a><br />
+        <a href="{{ path('umiejetnosci') }}">Umiejętności</a><br />
+        <a href="{{ path('totemy') }}">Totemy</a><br />
+        <a href="{{ path('logi') }}">Logi</a><br />
+        <br />
+        <b>»&nbsp;Inne</b><br />
+        <a href="http://galeria.mud.pl/index.php?/category/885" target="_parent">Galeria</a><br />
+        <a href="{{ path('linki') }}">Linki</a><br />
+        <a href="{{ path('o-stronie') }}">O stronie</a><br />
+        <a href="../src/index.html">Stare WWW</a><br />
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            <br />
+            <b>»&nbsp;User</b><br />
+            n:{{ app.user.username }}
+            <br />
+            r:{% if is_granted('ROLE_ADMIN') %}admin{% endif %}
+            <br />
+            <a href="{{ path('user-password') }}">> passwd</a>
+            <br />
+            <a href="{{ path('logout') }}">> exit</a>
+            <br />
+        {% endif %}
+
     </div>
     <div class="content {% block content_class_name %}{% endblock %}">
             <h1 class="viewport-small"><a id="menu_button" href="#" class="box-shadow-menu">{{ page_title }}</a></h1>
@@ -83,7 +97,7 @@
     <a href="{{ path('logi') }}">Logi</a> ::
     <a href="{{ path('ksiega-gosci') }}">Księga Gości</a> ::
     <a href="{{ path('linki') }}">Linki</a>
-    <br><br>
+    <br /><br />
     <span class="copy"><a href="{{ path('o-stronie') }}">© maUa Bostafinka™ and Infernal Seed 2000-2017</a></span>
     </td>
 </div>

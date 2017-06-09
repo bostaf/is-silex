@@ -17,7 +17,8 @@
         "rpodwika/yaml-config-service-provider": "^1.0",
         "symfony/twig-bridge": "^3.2",
         "twig/extensions": "^1.4",
-        "symfony/asset": "^3.2"
+        "symfony/asset": "^3.2",
+        "symfony/security": "^3.2"
     },
     "autoload": {
         "psr-4": {
@@ -25,6 +26,7 @@
         }
     },
     "require-dev": {
-        "silex/web-profiler": "^2.0"
+        "silex/web-profiler": "^2.0",
+        "symfony/security-bundle": "^3.2"
     }
 }

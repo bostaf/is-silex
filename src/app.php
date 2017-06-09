@@ -11,6 +11,11 @@
 use Symfony\Component\Debug\ErrorHandler;
 use Silex\Provider;
 
+// Session
+/**
+ * @var $app \Silex\Application
+ */
+$app->register(new Silex\Provider\SessionServiceProvider());
 
 // Service provider
 $app->register(new Rpodwika\Silex\YamlConfigServiceProvider(__DIR__.'/../app/config/config.yml'));
@@ -57,6 +62,38 @@ $app->register(new Silex\Provider\AssetServiceProvider(), array(
 // Controller
 $app->mount('/', new Is\Controller\MainController());
 
+// Security
+$securityFirewalls = array(
+    'main' => array(
+        'pattern' => '^/',
+        'anonymous' => true,
+        'form' => array('login_path' => '/login', 'check_path' => '/login_check'),
+        'logout' => array('logout_path' => '/logout', 'invalidate_session' => true),
+        'users' => function() use ($app) {
+            return new \Is\Security\User\UserProvider($app['config']['data']['users']['file']);
+        }
+    )
+);
+$securityRoleHierarchy = array(
+    'ROLE_ADMIN' => array('ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH', 'ROLE_MOD'),
+    'ROLE_MOD' => array('ROLE_USER'),
+);
+$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+    'security.firewalls' => $securityFirewalls,
+    'security.role_hierarchy' => $securityRoleHierarchy,
+    'security.default_encoder' => function($app) {
+        return new Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder(10);
+    },
+    'security.access_rules' => array(
+        array('^/user/password', 'ROLE_USER')
+    )
+));
+
+// UserManager service
+$app['user_manager'] = function() use ($app) {
+    return new \Is\Security\User\UserManager($app['config']['data']['users']['file']);
+};
+
 // Profiler
 if ($app['debug']) {
     $app->register(new Silex\Provider\ServiceControllerServiceProvider());
@@ -65,4 +102,4 @@ if ($app['debug']) {
         'profiler.mount_prefix' => '/_profiler', // this is the default
     ));
 }
-
+$app->boot();

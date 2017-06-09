@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% set page_title = 'Zaloguj' %}
+
+{% block content %}
+    {{ parent() }}
+
+    <form action="{{ path('login_check') }}" method="post">
+        <fieldset>
+            {{ error }}
+            <p>
+                <label for="_username"><span class="mandatory-parameter">*</span>Login:</label>
+                <span class="form-data">
+                    <input type="text" name="_username" id="_username" value="{{ last_username }}" />
+                </span>
+            </p>
+            <p>
+                <label for="_password"><span class="mandatory-parameter">*</span>Hasło:</label>
+                <span class="form-data">
+                    <input type="password" name="_password" id="_password" value="" />
+                </span>
+            </p>
+            <p>
+                <label>&nbsp;</label>
+                <input type="submit" />
+            </p>
+        </fieldset>
+    </form>
+
+    <script type="text/javascript">
+        $("#_username").focus();
+    </script>
+{% endblock %}
