@@ -7,7 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Is\Controller;
+
 use Is\Service\Guestbook;
 use Is\Service\LogsChats;
 use Is\Service\Members;
@@ -16,6 +18,7 @@ use Is\Service\WhoIs;
 use Silex\Application;
 use Silex\Api\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Class MainController
  * @package Is\Controller
@@ -26,6 +29,9 @@ class MainController implements ControllerProviderInterface {
      * @return mixed controllers_factory
      */
     public function connect(Application $app) {
+        /**
+         * @var $factory \Silex\ControllerCollection
+         */
         $factory = $app['controllers_factory'];
         $factory->get('/', function () use ($app) {
             return $app['twig']->render('powitanie.html.twig', array());
@@ -67,9 +73,22 @@ class MainController implements ControllerProviderInterface {
         })->bind('cygnus-division');
         $factory->get('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbook')->value('page', 1)->bind('ksiega-gosci');
         $factory->post('/ksiega-gosci/{page}', 'Is\Controller\MainController::guestbookAddPost')->value('page', 1);
+
+
+        $factory->get('/login', function(Request $request) use ($app) {
+            return $app['twig']->render('user/login.html.twig', array(
+                'error'         => $app['security.last_error']($request),
+                'last_username' => $app['session']->get('_security.last_username'),
+            ));
+        })->bind('login');
+        $factory->get('/user/password', 'Is\Controller\MainController::userPassword')->bind('user-password');
+        $factory->post('/user/password', 'Is\Controller\MainController::userPasswordSubmit');
+
+
         if ($app['config']['app']['require_https']) {
             $factory->requireHttps();
         }
+
         return $factory;
     }
     /**
@@ -167,6 +186,7 @@ class MainController implements ControllerProviderInterface {
      * @param Application $app
      * @return mixed
      */
+
     public function rozmowy(Application $app)
     {
         $chats = new LogsChats(
@@ -182,6 +202,7 @@ class MainController implements ControllerProviderInterface {
      * @param string $id
      * @return mixed
      */
+
     public function rozmowa(Application $app, $id)
     {
         $chats = new LogsChats(
@@ -192,6 +213,7 @@ class MainController implements ControllerProviderInterface {
             'rozmowa' => $chats->getChat($id)
         ));
     }
+
     /**
      * @param Application $app
      * @return mixed
@@ -206,6 +228,7 @@ class MainController implements ControllerProviderInterface {
             'logs' => $logs->getLogs()
         ));
     }
+
     public function guestbook(Application $app, $page)
     {
         $guestBook = new Guestbook(
@@ -219,6 +242,7 @@ class MainController implements ControllerProviderInterface {
             'pages' => $guestBook->getNumberOfPages()
         ));
     }
+
     public function guestbookAddPost(Application $app, Request $request, $page)
     {
         $guestBook = new Guestbook(
@@ -248,5 +272,44 @@ class MainController implements ControllerProviderInterface {
             ));
         }
         return $app->redirect($app->path('ksiega-gosci'));
+    }
+
+    public function userPassword(Application $app)
+    {
+        return $app['twig']->render('user/password.html.twig', array(
+            'error' => false
+        ));
+    }
+
+    public function userPasswordSubmit(Application $app, Request $request)
+    {
+        /**
+         * @var $user \Is\Security\User\User;
+         */
+        $user = $app['security.token_storage']->getToken()->getUser();
+        $encoder = $app['security.encoder_factory']->getEncoder($user);
+
+        $postCurrentPass = trim($request->request->get('current_password'));
+        $postNewPass = trim($request->request->get('new_password'));
+        $postRepeatNewPass = trim($request->request->get('repeat_new_password'));
+
+        $currentPasswordIsValid = $encoder->isPasswordValid($user->getPassword(), $postCurrentPass, $user->getSalt());
+        $newPasswordIsValid = $postNewPass == $postRepeatNewPass;
+
+        if (!($currentPasswordIsValid && $newPasswordIsValid)) {
+            return $app['twig']->render('user/password.html.twig', array(
+                'error' => true,
+            ));
+        }
+        // persist new password
+        $user->setPassword($encoder->encodePassword($postNewPass, $user->getSalt()));
+        // todo flush user
+        /**
+         * @var $um \Is\Security\User\UserManager
+         */
+        $um = $app['user_manager'];
+        $um->flushUser($user);
+        // redirect somewhere
+        return $app->redirect($app->path('powitanie'));
     }
 }
