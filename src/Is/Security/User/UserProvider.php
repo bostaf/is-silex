@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the Is package
+ *
+ * (c) Grzegorz Szaliñski <grzegorz.szalinski@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Is\Security\User;
 
@@ -11,18 +19,15 @@ use Symfony\Component\Yaml\Yaml;
 class UserProvider implements UserProviderInterface
 {
     protected $users;
+    protected $ymlPath;
 
-    public function __construct($yml_path)
+    public function __construct($ymlPath)
     {
-        $usersFromYaml = Yaml::parse(file_get_contents($yml_path));
+        $this->ymlPath = $ymlPath;
+        $usersFromYaml = Yaml::parse(file_get_contents($ymlPath));
         $this->users = array();
 
-        foreach ($usersFromYaml as $username => $attributes) {
-            $password = isset($attributes['password']) ? $attributes['password'] : null;
-            $salt = isset($attributes['salt']) ? $attributes['salt'] : null;
-            $roles = isset($attributes['roles']) ? $attributes['roles'] : array();
-            $this->users[$username] = new User($username, $password, $salt, $roles);
-        }
+        $this->users = $this->__yamlUsersToArrayUsers($usersFromYaml);
     }
     /**
      * Loads the user for the given username.
@@ -82,5 +87,40 @@ class UserProvider implements UserProviderInterface
     public function supportsClass($class)
     {
         return $class === 'Symfony\Component\Security\Core\User\User';
+    }
+
+    /**
+     * @param array $yamlParseUsersResult
+     * @return array
+     */
+    protected function __yamlUsersToArrayUsers($yamlParseUsersResult)
+    {
+        $users = array();
+        foreach ($yamlParseUsersResult as $username => $attributes) {
+            $password = isset($attributes['password']) ? $attributes['password'] : null;
+            $salt = isset($attributes['salt']) ? $attributes['salt'] : null;
+            $roles = isset($attributes['roles']) ? $attributes['roles'] : array();
+            $users[$username] = new User($username, $password, $salt, $roles);
+        }
+        return $users;
+    }
+
+    /**
+     * @param array $arrayUsers
+     * @return array
+     */
+    protected function __arrayUsersToYamlUsers($arrayUsers)
+    {
+        $users = array();
+        /**
+         * @var $user \Is\Security\User\User;
+         */
+        $user = null;
+        foreach($arrayUsers as $username => $user) {
+            $users[$username]['password'] = $user->getPassword();
+            $users[$username]['salt'] = $user->getSalt();
+            $users[$username]['roles'] = $user->getRoles();
+        }
+        return $users;
     }
 }

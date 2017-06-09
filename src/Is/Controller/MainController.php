@@ -7,6 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Is\Controller;
 
 use Is\Service\Guestbook;
@@ -273,6 +274,9 @@ class MainController implements ControllerProviderInterface {
     }
     public function userPasswordSubmit(Application $app, Request $request)
     {
+        /**
+         * @var $user \Is\Security\User\User;
+         */
         $user = $app['security.token_storage']->getToken()->getUser();
         $encoder = $app['security.encoder_factory']->getEncoder($user);
 
@@ -291,8 +295,11 @@ class MainController implements ControllerProviderInterface {
         // persist new password
         $user->setPassword($encoder->encodePassword($postNewPass, $user->getSalt()));
         // todo flush user
-            var_dump('<pre>', $app);
-        die();
+        /**
+         * @var $um \Is\Security\User\UserManager
+         */
+        $um = $app['user_manager'];
+        $um->flushUser($user);
         // redirect somewhere
         return $app->redirect($app->path('powitanie'));
     }

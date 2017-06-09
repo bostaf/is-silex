@@ -1,4 +1,4 @@
 admin:
-  password: $2y$10$2I7A7zo5ZsfDRpRPCOT9YOPPUn9EuTbGBjrvCYGcZh8WXCyTtB5Ya
-  salt:
+  password: $2y$10$hntL1t6lJ3TXBbRfwAVYt.gn9LHsPQhKzxQT/FZtYMbkC16pATCS6
+  salt: null
   roles: [ROLE_ADMIN]

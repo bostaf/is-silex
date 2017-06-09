@@ -86,6 +86,11 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     )
 ));
 
+// UserManager service
+$app['user_manager'] = function() use ($app) {
+    return new \Is\Security\User\UserManager($app['config']['data']['users']['file']);
+};
+
 // Profiler
 if ($app['debug']) {
     $app->register(new Silex\Provider\ServiceControllerServiceProvider());

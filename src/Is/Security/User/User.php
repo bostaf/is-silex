@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the Is package
+ *
+ * (c) Grzegorz Szaliñski <grzegorz.szalinski@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Is\Security\User;
 
@@ -7,12 +15,20 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 
 class User implements UserInterface, EquatableInterface
 {
-    private $username;
-    private $password;
-    private $salt;
-
     /**
-     * @var (Role|string)[]
+     * @var $username string
+     */
+    private $username;
+    /**
+     * @var $password string
+     */
+    private $password;
+    /**
+     * @var $salt string
+     */
+    private $salt;
+    /**
+     * @var $roles (Role|string)[]
      */
     private $roles;
 
