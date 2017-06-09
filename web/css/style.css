@@ -293,6 +293,10 @@ form fieldset p textarea {
     background-color: transparent;
     color: #3399cc;
 }
+form fieldset p textarea.monospaced {
+    font-family: monospace, sans-serif;
+    font-size: 0.8em;
+}
 div.guestbook-post {
     margin-bottom: 1.5em;
 }
