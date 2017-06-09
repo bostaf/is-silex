@@ -29,6 +29,9 @@ class MainController implements ControllerProviderInterface {
      * @return mixed controllers_factory
      */
     public function connect(Application $app) {
+        /**
+         * @var $factory \Silex\ControllerCollection
+         */
         $factory = $app['controllers_factory'];
         $factory->get('/', function () use ($app) {
             return $app['twig']->render('powitanie.html.twig', array());
@@ -183,6 +186,7 @@ class MainController implements ControllerProviderInterface {
      * @param Application $app
      * @return mixed
      */
+
     public function rozmowy(Application $app)
     {
         $chats = new LogsChats(
@@ -198,6 +202,7 @@ class MainController implements ControllerProviderInterface {
      * @param string $id
      * @return mixed
      */
+
     public function rozmowa(Application $app, $id)
     {
         $chats = new LogsChats(
@@ -208,6 +213,7 @@ class MainController implements ControllerProviderInterface {
             'rozmowa' => $chats->getChat($id)
         ));
     }
+
     /**
      * @param Application $app
      * @return mixed
@@ -222,6 +228,7 @@ class MainController implements ControllerProviderInterface {
             'logs' => $logs->getLogs()
         ));
     }
+
     public function guestbook(Application $app, $page)
     {
         $guestBook = new Guestbook(
@@ -235,6 +242,7 @@ class MainController implements ControllerProviderInterface {
             'pages' => $guestBook->getNumberOfPages()
         ));
     }
+
     public function guestbookAddPost(Application $app, Request $request, $page)
     {
         $guestBook = new Guestbook(
@@ -272,6 +280,7 @@ class MainController implements ControllerProviderInterface {
             'error' => false
         ));
     }
+
     public function userPasswordSubmit(Application $app, Request $request)
     {
         /**

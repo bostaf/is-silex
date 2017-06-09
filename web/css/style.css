@@ -250,11 +250,17 @@ form fieldset p label {
     text-align: right;
     padding-right: 0.5em;
 }
+form fieldset p label.wide {
+    width: 200px;
+}
 form fieldset p span.form-data {
     display: inline-block;
     text-align: left;
     width: 80%;
     float: left;
+}
+form fieldset p span.form-data.wide {
+    width: 40%;
 }
 form fieldset p span.form-data span.form-error {
     color: red;

@@ -12,6 +12,9 @@ use Symfony\Component\Debug\ErrorHandler;
 use Silex\Provider;
 
 // Session
+/**
+ * @var $app \Silex\Application
+ */
 $app->register(new Silex\Provider\SessionServiceProvider());
 
 // Service provider
