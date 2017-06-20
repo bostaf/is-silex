@@ -3,6 +3,7 @@
 {% block content_class_name %}members{% endblock %}
 
 {% block content %}
+    {% if is_granted('ROLE_MOD') %}
     <div id="members-log-add-section" style="display: none;">
         <div id="dodaj">Wklej output komendy <span class="inline-code">members</span> i naciśnij "Wyślij"</div>
         <form class="form" action="{{ path('misiaki') }}" method="post" name="members-log-add-form">
@@ -18,6 +19,7 @@
             </fieldset>
         </form>
     </div>
+    {% endif %}
     {% if count_bios > 0 %}
         {{ render(url('bios-menu')) }}
     {% endif %}

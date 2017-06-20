@@ -51,7 +51,12 @@
         <a href="{{ path('ksiega-gosci') }}">Księga Gości</a><br />
         <br />
         <b>»&nbsp;O klanie</b><br />
-        <a href="{{ path('misiaki') }}">mISiaki</a> <a href="{{ path('misiaki', {"_fragment": "dodaj"}) }}" id="members-log-add-link">+</a>
+        <a href="{{ path('misiaki') }}">mISiaki</a>
+
+        {% if is_granted('ROLE_MOD') %}
+        <a href="{{ path('misiaki', {"_fragment": "dodaj"}) }}" id="members-log-add-link">+</a>
+        {% endif %}
+
         <br />
         <a href="{{ path('historia') }}">Historia</a><br />
         <a href="{{ path('opis-klanu') }}">Opis Klanu</a><br />

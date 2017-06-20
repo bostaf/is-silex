@@ -66,6 +66,7 @@ class MainController implements ControllerProviderInterface {
         })->bind('linki');
         $factory->get('/aktualnosci/{page}', 'Is\Controller\MainController::aktualnosci')->value('page', 'main')->bind('aktualnosci');
         $factory->get('/misiaki/{firstLog}/{secondLog}', 'Is\Controller\MainController::misiaki')->value('firstLog', '')->value('secondLog', '')->bind('misiaki');
+        $factory->post('/misiaki/{firstLog}/{secondLog}', 'Is\Controller\MainController::misiakiAddLog')->value('firstLog', '')->value('secondLog', '');
         $factory->get('/bios', 'Is\Controller\MainController::biosMenu')->bind('bios-menu');
         $factory->get('/misiak/{misiak}', 'Is\Controller\MainController::historiaMisiaka')->assert('misiak', '[A-Za-z]+')->bind('historia-misiaka');
         $factory->get('/cygnus-division', function () use ($app) {
@@ -149,6 +150,11 @@ class MainController implements ControllerProviderInterface {
             'logs_from_url' =>$logsFromUrl,
             'count_bios' => count($bios->getMembersWithBios())
         ));
+    }
+
+    public function misiakiAddLog()
+    {
+
     }
     /**
      * @param Application $app

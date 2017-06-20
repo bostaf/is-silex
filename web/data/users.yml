@@ -2,3 +2,11 @@ admin:
   password: $2y$10$EP8oAghX.E1YWu3NJwr6WujBnd3bvurBB/o9jYY6m6hnF7ASnQqQK
   salt: null
   roles: [ROLE_ADMIN]
+user:
+  password: $2y$10$B6ugOeEnzMzLosdqTsWCAub.SrQQpW5R5dabEuuVTrlHNyz5m6GXO
+  salt: null
+  roles: [ROLE_USER]
+mod:
+  password: $2y$10$dzZljFJwICw7osYBVbINCuphE9I6YpQailohq6fRU1..536toO.wa
+  salt: null
+  roles: [ROLE_MOD]
