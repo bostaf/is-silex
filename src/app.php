@@ -36,6 +36,9 @@ $app->error(function (\Exception $e, $code) use ($app) {
     return $app['twig']->render('_error.html.twig', []);
 });
 
+// Custom route
+$app['route_class'] = 'Is\Route\Route';
+
 // Twig templating
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../app/views',

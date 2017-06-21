@@ -11,7 +11,7 @@
 setlocale(LC_ALL, 'pl_PL');
 require_once __DIR__.'/../vendor/autoload.php';
 
-$app = new Is\Service\Application();
+$app = new Is\Application\Application();
 
 // include bootstrap
 require __DIR__.'/../src/app.php';

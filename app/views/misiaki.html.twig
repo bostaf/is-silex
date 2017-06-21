@@ -3,23 +3,6 @@
 {% block content_class_name %}members{% endblock %}
 
 {% block content %}
-    {% if is_granted('ROLE_MOD') %}
-    <div id="members-log-add-section" style="display: none;">
-        <div id="dodaj">Wklej output komendy <span class="inline-code">members</span> i naciśnij "Wyślij"</div>
-        <form class="form" action="{{ path('misiaki') }}" method="post" name="members-log-add-form">
-            <fieldset>
-                <p>
-                    <label><span class="mandatory-parameter">*</span>Log:</label>
-                    <span class="form-data">
-                        {% if errors is defined %}<span class="form-error">Pole "Log" jest obowiązkowe.</span>{% endif %}
-                        <textarea name="members-log-add-text" id="members-log-add-text" class="monospaced"></textarea>
-                    </span>
-                </p>
-                <p><label>&nbsp;</label><input type="submit" value="Wyślij"><input type="reset" id="members-log-add-reset" value="Anuluj"></p>
-            </fieldset>
-        </form>
-    </div>
-    {% endif %}
     {% if count_bios > 0 %}
         {{ render(url('bios-menu')) }}
     {% endif %}

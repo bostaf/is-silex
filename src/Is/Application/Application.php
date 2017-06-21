@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Is\Service;
+namespace Is\Application;
 
 use Silex\Application as BaseApplication;
 

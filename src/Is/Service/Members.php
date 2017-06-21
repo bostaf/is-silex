@@ -97,7 +97,7 @@ class Members
 
         $lines = file($this->getDir() . $firstFileName);
         foreach ($lines as $line)
-            if (preg_match($this->getLineRegexp(), $line, $lineArray)) {
+            if (preg_match($this->getLineRegexp(), trim($line), $lineArray)) {
                 $nick = trim($lineArray[4]);
                 $first['members'][$nick]['clevel'] = (int) $lineArray[1];
                 $first['members'][$nick]['level'] = (int) $lineArray[2];
@@ -110,7 +110,7 @@ class Members
 
         $lines = file($this->getDir() . $secondFileName);
         foreach ($lines as $line)
-            if (preg_match($this->getLineRegexp(), $line, $lineArray)) {
+            if (preg_match($this->getLineRegexp(), trim($line), $lineArray)) {
                 $nick = trim($lineArray[4]);
                 $second['members'][$nick]['clevel'] = (int) $lineArray[1];
                 $second['members'][$nick]['level'] = (int) $lineArray[2];
@@ -230,7 +230,34 @@ class Members
     }
 
     /**
-     * @return string
+     * Parses input according to the regex from config
+     * and creates new entry in data store (new file in data dir)
+     * @param string $log Output from in-game members command
+     * @return bool
+     */
+    public function addLog($log)
+    {
+        if (trim($log) === '') return false;
+
+        $log = explode(PHP_EOL, $log);
+        $log = array_map('trim', $log);
+        foreach($log as $key => $line) {
+            if (preg_match($this->getLineRegexp(), $line) !== 1) {
+                unset($log[$key]);
+            }
+        }
+
+        if (empty($log)) return false;
+
+        $fileCreated = file_put_contents($this->getDir() . '/mem-' . date('Y-m-d') . '.txt', implode(PHP_EOL, $log) . PHP_EOL);
+
+        if (false === $fileCreated) return false;
+
+        return true;
+    }
+
+    /**
+     * @return string Relative path with trailing slash
      */
     public function getDir()
     {

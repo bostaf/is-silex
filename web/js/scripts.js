@@ -43,17 +43,5 @@ $(document).ready(function() {
         guestbookButtonContainer.show();
     });
 
-
-    if($("#members-log-add-section") && $(location).attr('hash').slice(1) === "dodaj") {
-        $("#members-log-add-section").show();
-        $("#members-log-add-text").focus();
-    }
-    $("#members-log-add-link").on("click", function() {
-        $("#members-log-add-section").show();
-        $("#members-log-add-text").focus();
-    });
-    $("#members-log-add-reset").on("click", function() {
-        $("#members-log-add-section").hide();
-    });
-    //alert($(location).attr('hash').slice(1));
+    $("#members-log-add-text").focus();
 });

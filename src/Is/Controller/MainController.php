@@ -65,8 +65,9 @@ class MainController implements ControllerProviderInterface {
             return $app['twig']->render('linki.html.twig', array());
         })->bind('linki');
         $factory->get('/aktualnosci/{page}', 'Is\Controller\MainController::aktualnosci')->value('page', 'main')->bind('aktualnosci');
+        $factory->get('/misiaki/dodaj', 'Is\Controller\MainController::misiakiAddLog')->bind('misiaki-add')->secure('ROLE_MOD');
+        $factory->post('/misiaki/dodaj', 'Is\Controller\MainController::misiakiAddLog')->secure('ROLE_MOD');
         $factory->get('/misiaki/{firstLog}/{secondLog}', 'Is\Controller\MainController::misiaki')->value('firstLog', '')->value('secondLog', '')->bind('misiaki');
-        $factory->post('/misiaki/{firstLog}/{secondLog}', 'Is\Controller\MainController::misiakiAddLog')->value('firstLog', '')->value('secondLog', '');
         $factory->get('/bios', 'Is\Controller\MainController::biosMenu')->bind('bios-menu');
         $factory->get('/misiak/{misiak}', 'Is\Controller\MainController::historiaMisiaka')->assert('misiak', '[A-Za-z]+')->bind('historia-misiaka');
         $factory->get('/cygnus-division', function () use ($app) {
@@ -152,9 +153,34 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
-    public function misiakiAddLog()
+    public function misiakiAddLog(Application $app, Request $request)
     {
+        $errors = false;
+        $tooOften = true;
 
+        $members = new Members(
+            $app['config']['data']['members']['dir'],
+            $app['config']['data']['members']['file_regex'],
+            $app['config']['data']['members']['line_regex']
+        );
+
+        // todo Make sure NOT to create new logs too often
+        if ($members->getLatestDate() + /* config min days between logs */ >= new \DateTime('now')) {
+            $tooOften = true;
+        }
+
+        if ($request->getMethod() === 'POST') {
+            if ($members->addLog($request->request->get('members-log-add-text'))) {
+                return $app->redirect($app->path('misiaki'));
+            } else {
+                $errors = true;
+            }
+        }
+
+        return $app['twig']->render('misiaki-add.html.twig', array(
+            'errors' => $errors,
+            'too_often' => $tooOften
+        ));
     }
     /**
      * @param Application $app
