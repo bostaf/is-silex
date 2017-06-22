@@ -156,16 +156,23 @@ class MainController implements ControllerProviderInterface {
     public function misiakiAddLog(Application $app, Request $request)
     {
         $errors = false;
-        $tooOften = true;
+        $tooOften = false;
+        $dir = $app['config']['data']['members']['dir'];
+        $fileRegex = $app['config']['data']['members']['file_regex'];
+        $lineRegex = $app['config']['data']['members']['line_regex'];
+        $daysOffset = (int) $app['config']['members']['max_frequency_days'];
 
         $members = new Members(
-            $app['config']['data']['members']['dir'],
-            $app['config']['data']['members']['file_regex'],
-            $app['config']['data']['members']['line_regex']
+            $dir,
+            $fileRegex,
+            $lineRegex
         );
 
         // todo Make sure NOT to create new logs too often
-        if ($members->getLatestDate() + /* config min days between logs */ >= new \DateTime('now')) {
+        $latestDate = $members->getLatestDate();
+        $latestDateAndOffset = $latestDate->add(new \DateInterval('P'.$daysOffset.'D'));
+        $now = new \DateTime('now');
+        if ($latestDateAndOffset >= $now) {
             $tooOften = true;
         }
 

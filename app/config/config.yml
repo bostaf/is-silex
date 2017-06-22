@@ -7,6 +7,9 @@ guestbook:
   posts_per_page: 12
   max_frequency: +5 minutes
 
+members:
+  max_frequency_days: 29
+
 data:
   news:
     dir: '../web/data/news'

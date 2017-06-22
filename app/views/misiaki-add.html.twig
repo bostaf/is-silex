@@ -9,11 +9,11 @@
         <fieldset>
             <p>
                 <label><span class="mandatory-parameter">*</span>Log:</label>
-                    <span class="form-data">
-                        {% if errors %}<span class="form-error">Pole "Log" jest obowiązkowe.</span>{% endif %}
-                        {% if too_often %}<span class="form-error">Jeszcze nie minęło odpowiednio dużo czasu od momentu dodania poprzedniego loga. To się nie uda :P</span>{% endif %}
-                        <textarea name="members-log-add-text" id="members-log-add-text" class="monospaced"></textarea>
-                    </span>
+                <span class="form-data">
+                    {% if too_often %}<span class="form-error">Jeszcze nie minęło odpowiednio dużo czasu od momentu dodania poprzedniego loga. To się nie uda :P</span>{% endif %}
+                    {% if errors and not too_often %}<span class="form-error">Pole "Log" jest obowiązkowe.</span>{% endif %}
+                    <textarea name="members-log-add-text" id="members-log-add-text" class="monospaced"></textarea>
+                </span>
             </p>
             <p><label>&nbsp;</label><input type="submit" value="Wyślij" /></p>
         </fieldset>

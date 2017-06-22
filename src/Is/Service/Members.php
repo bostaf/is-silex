@@ -256,6 +256,12 @@ class Members
         return true;
     }
 
+    public function getLatestDate()
+    {
+        $latestDate = new \DateTime('now');
+        return $latestDate->sub(new \DateInterval('P30D'));
+    }
+
     /**
      * @return string Relative path with trailing slash
      */
