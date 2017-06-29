@@ -9,7 +9,11 @@
     Tak więc bez strachu można usuwać - w razie pomyłki można bez problemu przywrócić.
     <br /><br />
     {% for log in logs %}
-        <div>{{ log.filename }} (<a href="">{% if log.archived %}undelete{% else %}delete{% endif %}</a>)</div>
+        {% if log.archived %}
+            <div>{{ log.filename }} (<a href="{{ path('misiaki-restore', {'log': log.filename|trim('.txt.deleted')|trim('mem-')}) }}">przywróć</a>)</div>
+        {% else %}
+            <div>{{ log.filename }} (<a href="{{ path('misiaki-remove', {'log': log.filename|trim('.txt')|trim('mem-')}) }}">usuń</a>)</div>
+        {% endif %}
     {% endfor %}
 </div>
 {% endblock %}
