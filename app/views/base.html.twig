@@ -54,7 +54,7 @@
         <a href="{{ path('misiaki') }}">mISiaki</a>
 
         {% if is_granted('ROLE_MOD') %}
-        <a href="{{ path('misiaki-add') }}">+</a>
+        (<a href="{{ path('misiaki-add') }}">+</a><a href="{{ path('misiaki-remove') }}">-</a>)
         {% endif %}
 
         <br />

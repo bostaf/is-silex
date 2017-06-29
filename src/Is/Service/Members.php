@@ -216,6 +216,7 @@ class Members
                 $dateFromFileName = new \DateTime($fileNameArray[1] . '-' . $fileNameArray[2] . '-' . $fileNameArray[3]);
                 $files[$i]['file_name_date_Ymd'] = $dateFromFileName->format('Y-m-d');
                 $files[$i]['file_date'] = $dateFromFileName->format('c');
+                $files[$i]['filename'] = $file;
                 $i++;
             }
         }
@@ -258,8 +259,25 @@ class Members
 
     public function getLatestDate()
     {
-        $latestDate = new \DateTime('now');
-        return $latestDate->sub(new \DateInterval('P30D'));
+        $dir_handle = opendir($this->getDir());
+
+        $files = array();
+        while ($file = readdir($dir_handle)) {
+            if (preg_match($this->getFileRegex(), $file, $fileNameArray)) {
+                $membersDate = new \DateTime($fileNameArray[1] . '-' . $fileNameArray[2] . '-' . $fileNameArray[3]);
+                $files[$file]['date'] = $membersDate;
+            }
+        }
+        closedir($dir_handle);
+
+        if (count($files) == 0) return false;
+
+        krsort($files);
+
+        $first = array_slice($files, 0, 1);
+
+        $firstFileName = key($first);
+        return $first[$firstFileName]['date'];
     }
 
     /**

@@ -66,6 +66,7 @@ class MainController implements ControllerProviderInterface {
         })->bind('linki');
         $factory->get('/aktualnosci/{page}', 'Is\Controller\MainController::aktualnosci')->value('page', 'main')->bind('aktualnosci');
         $factory->get('/misiaki/dodaj', 'Is\Controller\MainController::misiakiAddLog')->bind('misiaki-add')->secure('ROLE_MOD');
+        $factory->get('/misiaki/usun', 'Is\Controller\MainController::misiakiRemoveLog')->bind('misiaki-remove')->secure('ROLE_MOD');
         $factory->post('/misiaki/dodaj', 'Is\Controller\MainController::misiakiAddLog')->secure('ROLE_MOD');
         $factory->get('/misiaki/{firstLog}/{secondLog}', 'Is\Controller\MainController::misiaki')->value('firstLog', '')->value('secondLog', '')->bind('misiaki');
         $factory->get('/bios', 'Is\Controller\MainController::biosMenu')->bind('bios-menu');
@@ -153,6 +154,11 @@ class MainController implements ControllerProviderInterface {
         ));
     }
 
+    /**
+     * @param Application $app
+     * @param Request $request
+     * @return mixed
+     */
     public function misiakiAddLog(Application $app, Request $request)
     {
         $errors = false;
@@ -168,7 +174,6 @@ class MainController implements ControllerProviderInterface {
             $lineRegex
         );
 
-        // todo Make sure NOT to create new logs too often
         $latestDate = $members->getLatestDate();
         $latestDateAndOffset = $latestDate->add(new \DateInterval('P'.$daysOffset.'D'));
         $now = new \DateTime('now');
@@ -189,6 +194,35 @@ class MainController implements ControllerProviderInterface {
             'too_often' => $tooOften
         ));
     }
+
+    /**
+     * "Deletes" a log. Actually, the log file gets a string in the filename
+     * thus resulting in the logfile being skipped by logs getter
+     * @param Application $app
+     * @param Request $request
+     * @return mixed
+     */
+    public function misiakiRemoveLog(Application $app, Request $request)
+    {
+        // get all files from data dir
+        $file_regex = '/' . trim(trim($app['config']['data']['members']['file_regex'], '/'), '$') . '(\.'.$app['config']['members']['archive_flag'].')?$/';
+        $misiaki = new Members($app['config']['data']['members']['dir'], $file_regex, $app['config']['data']['members']['file_regex']);
+        //var_dump('<pre>', $misiaki->getFileRegexp());die();
+        $logs = $misiaki->getFiles();
+        foreach ($logs as $key => $log) {
+            $logs[$key]['archived'] = (false === strstr($log['filename'], $app['config']['members']['archive_flag'])) ? false : true;
+        }
+        //var_dump('<pre>', $logs);die();
+
+        // display the files with "delete/archive" button/link
+
+        // do delete
+
+        return $app['twig']->render('misiaki-remove.html.twig', array(
+            'logs' => $logs
+        ));
+    }
+
     /**
      * @param Application $app
      * @return mixed

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+{% set page_title = 'Usuń log members' %}
+{% block content_class_name %}members{% endblock %}
+
+{% block content %}
+<div id="members-log-add-section">
+
+    Tak naprawdę to logi nie są usuwane. Zamiast tego dostają flagę "deleted" i nie są pokazywane w listingach.
+    Tak więc bez strachu można usuwać - w razie pomyłki można bez problemu przywrócić.
+    <br /><br />
+    {% for log in logs %}
+        <div>{{ log.filename }} (<a href="">{% if log.archived %}undelete{% else %}delete{% endif %}</a>)</div>
+    {% endfor %}
+</div>
+{% endblock %}
